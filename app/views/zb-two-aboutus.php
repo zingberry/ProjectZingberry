@@ -104,9 +104,15 @@
 			<br />
 			<p>We are a startup company made up of amazing programmers, designers and entrepreneurs working together to create a phenomenal product. If you think you have what it takes to work with us, check our employment page and send us your info at <a href="mailto:employment@zingberry.com">employment@zingberry.com</a>   </p>
 			<br />
-			<p align="center"><b>Team Zingberry</b></p>
 			<br />
+            <p align="center"><h3>Team Zingberry</h3></p>
 			<div id="bio"> 
+				<div class="pic">  
+				</div> 
+				<div class="text"> 
+				</div> 
+			</div>	
+            <div id="bio"> 
 				<div class="pic"> 
 					<img src="images/bios/Shawn.png" border="0" width="200" height="220" /> 
 				</div> 

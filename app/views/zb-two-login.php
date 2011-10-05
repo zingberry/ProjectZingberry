@@ -61,11 +61,12 @@ $(document).ready(function() {
 <title>Zingberry!</title>
 </head>
 
-<body>
+<body onload="setUpSlideShow()">
 	<div id="content">
 	  <form name="frm_login" action="#" method="post">
    	  <ul class="form">
-            	<li><a href="<?=site_url("/")?>" class="logo" title="Zingberry!"><body onload="setUpSlideShow()"><div id="slideshow"><div id="slides"><div class="slide"><img src="images/logo_login.jpg alt="Zingberry!" width="400" height="300"/></div></a>
+      	<div id="slideshow"><div id="slides"><div class="slide"><img src="images/logo_login.jpg" width="826" height="305"/>Slide content 1</div><div class="slide"><img src="images/logo_forgot_password.jpg" width="826" height="305"/>Slide content 2</div><div class="slide"><img src="images/logo_login.jpg" width="826" height="305"/>Slide content 3</div></div><div id="slides-controls"><a href="#">1</a> <a href="#">2</a> <a href="#">3</a></div></div>
+      			           
            	    <input type="text" name="name" title="Name"/></li>
                 <li><input type="text" name="email" title="Rutgers Email" /></li>
                 <li><input type="password" name="password" title="Password" /></li>
