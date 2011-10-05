@@ -1,0 +1,113 @@
+@charset "utf-8";
+/* CSS Document */
+
+#content	{ width:825px; margin:0px auto; text-align:center; height:95%; min-height:700px;}
+a.logo		{ margin-top:130px; display:inline-block; padding:10px 0px;}
+ul.form		{ list-style:none; display:inline-block}
+ul.form li	{ line-height:45px;}
+ul.form input	{ width:400px; border:none; font-family:"Myriad Pro", "Century Gothic", Arial; font-size:15px; font-weight:bold;background:#DDD; text-align:center; padding:2px; height:25px;color:#6f6f6f;}
+ul.form input.sub	{ background:url(../images/register_button.jpg) center top no-repeat; width:120px;}
+ul.form a			{ text-decoration:underline;}
+ul.form_sm			{ list-style:none; display:inline-block}
+ul.form_sm li		{ line-height:30px;}
+ul.form_sm input	{ width:160px; border:none;font-family:"Myriad Pro", "Century Gothic", Arial; font-weight:bold; font-size:14px; background:#f6f6f5; text-align:center; padding:2px; height:20px;color:#6f6f6f;}
+ul.form_sm input.sub	{ background:url(../images/login_button_sm.jpg) center top no-repeat; width:80px;}
+ul.form_sm a.forgot		{ font-style:italic; text-align:right; text-decoration:underline;color:#6f6f6f; font-size:13px; width:180px; display:inline-block}
+
+#header				{ background:url(../images/header_bg.jpg) top left no-repeat; width:775px; height:90px; padding:2px 10px 8px 40px; text-align:left;}
+a.log_out			{ background:url(../images/logout.png) top left no-repeat; width:20px; height:20px; display:inline-block; float:right;}
+a.log_out:hover		{ background:url(../images/close_hover.png) top left no-repeat;}
+#header	ul			{ float:right; list-style:none; margin-top:35px;}
+#header	ul li		{ float:left;}
+#header	ul li	a	{ width:32px; height:33px; display:inline-block; padding:0px 4px; text-decoration:none;}
+#header	ul li a.video		{ background:url(../images/icons_normal.png) -00px 0px no-repeat;}
+#header	ul li a.marketplace	{ background:url(../images/icons_normal.png) -40px 0px no-repeat;}
+#header	ul li a.events		{ background:url(../images/icons_normal.png) -80px 0px no-repeat;}
+#header	ul li a.user		{ background:url(../images/icons_normal.png) -120px 0px no-repeat;}
+#header	ul li a.video:hover			{ background:url(../images/icons_hover.png) -00px 0px no-repeat;}
+#header	ul li a.marketplace:hover	{ background:url(../images/icons_hover.png) -40px 0px no-repeat;}
+#header	ul li a.events:hover		{ background:url(../images/icons_hover.png) -80px 0px no-repeat;}
+#header	ul li a.user:hover			{ background:url(../images/icons_hover.png) -120px 0px no-repeat;}
+#header	input			{ width:460px; vertical-align:top; margin-top:40px; border:#999 1px solid;font-family:"Myriad Pro", "Century Gothic", Arial; font-weight:bold; font-size:14px; background:#FFF; text-align:center; padding:2px; height:20px;color:#6f6f6f;}
+
+#slideshow{height:330px; width:400px; float:left}
+#slides{top left repeat-x; height:300px; width:400px;overflow:auto; display:inline-block; text-align:left; padding-left:20px; padding-top:20px;margin-left:10%;margin-right:10%}
+.slide{height:1000px; width:1000px; overflow:hidden; position:absolute}
+#slides-controls{width:60px; background-color:#fff; height:20px; margin-left:auto; margin-right:auto; padding:5px}
+#slides-controls a{margin:5px; width:8px; height:8px; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; -o-border-radius:4px; background:#F60; border:1px solid #fff; text-indent:-9000px; display:block; overflow:hidden; float:left}
+#slides-controls a:hover{background:#F30}
+#slides-controls a.highlight{background:#fff; border:1px solid #F30}
+
+
+#body				{ background:url(../images/account_body_bg.jpg) top left repeat-x; height:550px; width:630px;overflow:auto; display:inline-block; text-align:left; padding-left:20px; padding-top:20px;margin-left:10%;margin-right:10%}
+#body h2			{font-size:22px;}
+#body ul			{ display:inline-block; text-align:left;}
+ul.form_account				{ list-style:none; display:inline-block}
+ul.form_account li.form_account_element			{ line-height:20px; display:inline-block; clear:both; padding-right:100px;}
+ul.form_account input		{ width:450px; margin-bottom:5px; border:#999 1px solid; font-family:"Myriad Pro", "Century Gothic", Arial; font-size:14px; font-weight:bold;background:#FFF; text-align:left; padding:2px; height:22px;color:#6f6f6f;}
+ul.form_account input.sub	{ background:url(../images/register_button.jpg) center top no-repeat; width:120px;}
+ul.form_account select		{ width:455px; margin-bottom:5px; border:none; font-family:"Myriad Pro", "Century Gothic", Arial; font-size:14px; font-weight:bold;background:#FFF; text-align:left; padding:2px; height:22px;color:#6f6f6f;}
+ul.form_account li input.btn{ background:url(../images/btn_bg.png) top left no-repeat; width:80px; border:0; padding:0px 15px; display:inline-block;font-family:"Myriad Pro", "Century Gothic", Arial; font-size:16px; color:#fff; font-weight:bold;}
+#body1						{min-height:600px; width:805px; float:right; display:inline-block; text-align:left; padding-left:20px; padding-top:20px;}
+
+ul.ac_set					{ list-style:none}
+ul.ac_set li				{ padding:2px 5px; text-align:left;}
+ul.ac_set a					{ background:url(../images/menu_list.png) left 0px  no-repeat; padding-left:25px; line-height:25px; display:inline-block;}
+ul.ac_set a.active			{ background:url(../images/menu_list.png) left -29px no-repeat;}
+ul.ac_set li li				{ padding:2px 30px; list-style:none;}
+ul.ac_set input				{ border:none; background:#fefefe; width:190px; padding:2px 5px;}
+
+input.txt					{ background:#f5f5f5; width:685px; margin-right:10px; height:25px; padding:2px 5px; border:0;font-family:"Myriad Pro", "Century Gothic", Arial; font-size:16px; color:#6f6f6f;}
+input.btn					{ background:url(../images/btn_bg.png) top left no-repeat; width:80px; border:0; padding:5px 15px; display:inline-block;font-family:"Myriad Pro", "Century Gothic", Arial; font-size:16px; color:#fff; font-weight:bold;}
+div.text	{padding-left:240px; float:left; width:350px; margin-bottom:100px;text-align:left}
+div.pic		{width:50px;height:250px}
+
+object:focus { outline:none; }
+#bodyVideoChat {display:inline-block; text-align:center;}
+#flashContent 
+{	
+	z-index:-1;
+	position: absolute;
+	display:none;
+	text-align:center; 
+	width:525px;
+	height:600px;
+	padding-top:5px;
+	padding-bottom:25px;
+}
+
+#footer		{ background:url(../images/footer_bg.jpg) top left no-repeat; width:705px; margin:0px auto; height:40px; padding:10px 60px; bottom:0px;}
+#footer ul	{ list-style:none; margin:0px auto; width:auto; display:inline-block; padding:0px 39px;}
+#footer	li	{ float:left}
+#footer	a	{ padding:5px 39px; display:inline-block;color:#6f6f6f;}
+
+#slider 		{position:absolute; background-image:url(../images/login_area_bg.jpg);background-repeat:repeat-x;background-position: bottom;width: 350px;height: 140px;margin-left: -320px;top:20px;}
+#slider img 	{border: 0;}
+#sliderContent 	{margin: 15px 0 0 60px;position: absolute;text-align:center;}
+#openCloseWrap 	{position:absolute;margin: 00px 0 0 310px;height:141px;background:url(../images/login_button.jpg) top right no-repeat;}
+#topMenuImage	{width:50px;	height:131px;	display:inline-block;}
+
+#slider1 			{position:absolute; background-image:url(../images/left_menu_bg.jpg); background-repeat:repeat-x;background-position: bottom;width: 280px;height: 245px;margin-left: -240px;top:100px;}
+#slider1 img 		{border: 0;}
+#sliderContent1 	{margin: 15px 0 0 30px;position: absolute;text-align:center;}
+#openCloseWrap1 	{position:absolute;margin: 00px 0 0 230px;height:250px;background:url(../images/account_setting.jpg) top right no-repeat;}
+#topMenuImage1		{width:50px;	height:250px;	display:inline-block;}
+
+#slider2 			{position:absolute; background-image:url(../images/left_menu_bg.jpg);background-repeat:repeat-x;background-position: bottom;width: 230px;height: 245px;margin-left: -240px;top:350px;}
+#slider2 img 		{border: 0;}
+#sliderContent2 	{margin: 15px 0 0 30px;position: absolute;text-align:center;}
+#openCloseWrap2 	{position:absolute;margin: 00px 0 0 230px;height:250px;background:url(../images/chat_requests.png) top right no-repeat;}
+#topMenuImage2		{width:50px;	height:250px;	display:inline-block;}
+openCloseIdentifier2 { display:none;}
+
+#slider3 			{position:absolute; background-image:url(../images/left_menu_bg_big.jpg); background-repeat:repeat-x;background-position: bottom;width: 280px;height: 393px;margin-left: -280px;top:100px;}
+#slider3 img 		{border: 0;}
+#sliderContent3 	{margin: 15px 0 0 10px; height:350px; width:250px; font-size:14px; overflow:auto;position: absolute;text-align:center;}
+#openCloseWrap3 	{position:absolute;margin: 00px 0 0 270px;height:393px;background:url(../images/filter-search.png) top right no-repeat;}
+#topMenuImage3		{width:50px;	height:393px;	display:inline-block;}
+
+#slider4 			{position:absolute; background-image:url(../images/left_menu_bg.jpg);background-repeat:repeat-x;background-position: bottom;width: 280px;height: 245px;margin-left: -280px;top:500px;}
+#slider4 img 		{border: 0;}
+#sliderContent4 	{margin: 15px 0 0 10px;position: absolute;text-align:center; font-size:14px;overflow:auto; height:220px;width:250px;}
+#openCloseWrap4 	{position:absolute;margin: 00px 0 0 270px;height:250px;background:url(../images/chat_requests.png) top right no-repeat;}
+#topMenuImage4		{width:50px;	height:250px;	display:inline-block;}

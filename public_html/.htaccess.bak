@@ -1,0 +1,19 @@
+RewriteEngine On
+RewriteBase /
+RewriteCond %{HTTP_HOST} ^www.zingberry.com$ [NC]
+RewriteRule ^(.*)$ http://zingberry.com/$1 [L,R=301]
+
+DirectoryIndex index.php
+RewriteCond $1 !^(index\.php|images|/cgi-bin/|robots\.txt|favicon\.ico|cirrus)
+RewriteCond %{REQUEST_URI} !cgi-bin
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !/cgi-bin/
+RewriteRule ^(.*)$ ./index.php/$1 [L,QSA]
+
+
+#RewriteCond $1 !^(cgi-bin)
+#,QSA
+
+#RewriteCond %{QUERY_STRING} !vardump  
+#RewriteRule (.*) http://zingberry.com/$1?vardump&reqhost=%{HTTP_HOST}&uri=%{REQUEST_URI} [R=301,L,QSA] 

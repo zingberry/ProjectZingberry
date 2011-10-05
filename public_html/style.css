@@ -1,0 +1,392 @@
+/* CSS Document */
+
+body {  
+	font-family:Arial, Helvetica, sans-serif;
+    margin:0px; padding:0px;  
+    background-color:#cfec69;  
+	//background-color:#000000;  
+}  
+
+img {
+	border:0px;
+}
+  
+#main {  
+	/*background-image:url(images/bg_repeat.jpg);
+	background-repeat:repeat-x;
+    background-color:#cfec69;*/
+	
+	background-image:url(images/bg_repeat.jpg);
+	background-repeat:repeat-x;
+	min-height:638px;
+	max-height:2000px;
+}  
+
+#main .container{  
+    //background-color:#cfec69;  
+} 
+#footer {  
+	position: fixed;
+	width: 100%;
+	bottom:0px;
+	height:76px;
+	padding-top:76px;
+}  
+#footer_bar {  
+	background-color:#000000;
+    color:white;  
+	padding:10px; 
+	height:30px
+}  
+#footer_legal {
+	background-color:#cfec69; 
+	color:#666; 
+	padding:3px; 
+	height:20px
+}
+ 
+
+#header {  
+    background-color:#000000;
+	height:100px;
+    color:white;  
+} 
+#block_content {
+	position:absolute;
+	//float:left;
+	//padding-top:48px;
+	//min-height:1000px;
+	//margin-top:100px;	
+}
+
+.container {  
+    width:1024px;  
+    margin:0 auto;  
+	position:relative;
+    //border:1px solid red;  
+}  
+
+#logo_pic {
+	width:76px;
+	height:76px;
+	position:static;
+	float:left;
+	margin-left:474px;
+	margin-top:-38px;
+	
+	
+}
+
+#logo_name {
+	width:264px;
+	height:100px;
+	position:static;
+	float:left;
+	margin-left:157px;
+}
+
+#rutgers_community {
+	width:473px;
+	height:51px;
+	position:absolute;
+	float:top;
+	margin-left:64px;
+	margin-top:66px;
+}
+	
+#register_img {
+	width:264px;
+	height:51px;
+	position:absolute;
+	float:left;
+	margin-left:648px;
+	margin-top:66px;
+}
+
+#rutgers_students {
+	width:474px;
+	height:357px;
+	position:absolute;
+	//float:left;
+	margin-left:75px;
+	margin-top:150px;
+}
+
+#login {
+	text-align:right;
+	position:relative;
+	float:right;
+	margin-right:75px;
+	margin-top:10px;
+}
+#login_error{
+	color:#F00;
+	position:absolute;
+	float:right;
+	right:250px;
+	top:10px;
+	width:200px;
+}
+
+#register {
+	//text-align:right;
+	position:absolute;
+	//float:right;
+	left:649px;
+	top:150px;
+	width:400px;
+}
+
+#register_errors{
+	color:#F00;
+	width:400px;
+}
+
+#success{
+	text-align:center;
+	position:absolute;
+	left:212px;
+	top:75px;
+	font-size:large;
+	width:600px;
+}
+
+ul#menu {  
+    margin:0px; 
+	padding:0px;
+	margin-top:5px;
+	margin-left:210px;
+    position:absolute;  
+    rightright:0px;  
+}  
+ul#menu li {  
+    display:inline;  
+    margin-left:12px;  
+}  
+ul#menu li a {  
+    text-decoration:none;  
+    color:#FFF;
+    //font-weight:bold;
+}  
+ul#menu li a.active, ul#menu li a:hover {  
+    color:#CCC;  
+}  
+
+
+
+//zbevents 
+
+ul#account_menu {  
+    margin:0px; 
+	padding:0px;
+	margin-top:5px;
+	margin-left:210px;
+    position:absolute;  
+    rightright:0px;  
+}  
+ul#account_menu li {  
+    display:inline;  
+    margin-left:12px;  
+}  
+ul#account_menu li a {  
+    text-decoration:none;  
+    color:#FFF;
+    //font-weight:bold;
+}  
+ul#account_menu li a.active, ul#account_menu li a:hover {  
+    color:#CCC;  
+} 
+
+#account {
+	text-align:right;
+	position:relative;
+	float:right;
+	margin-right:125px;
+	margin-top:30px;
+}
+
+
+
+/*
+#########################################
+/events
+#########################################
+*/
+
+#searchbar {
+	position:absolute;
+	width:180px;
+	float:left;	
+	font-size:12px;
+	top:100px;
+	left:90px;
+}
+
+#event_browser_pic {
+	width:210px;
+	height:50px;
+	position:absolute;
+	//float:left;
+	top:50px;
+	left:270px;
+	
+	
+}
+
+#events_content{
+	position:absolute;
+	float:left;
+	left:270px;
+	top:100px;
+	width:700px;
+	//height:500px;
+	//overflow:auto;
+	padding-bottom:76px;
+}
+
+#event_row{
+	height:240px;
+}
+
+.event{
+	float:left;
+	background-color:#FFF;
+	font-size:small;
+	width:150px;
+	height:220px;
+	margin-right:20px;
+	margin-bottom:20px;
+	
+}
+
+#event_pic{
+	background-color:#000;
+	margin-top:15px;
+	margin-left:15px;
+	width:120px;
+	height:120px;
+}
+
+#event_info{
+	//background-color:#000;
+	font-size:smaller;
+	margin-top:15px;
+	margin-left:15px;
+	width:120px;
+	height:55px;
+	overflow:hidden;
+}
+
+#events_content a {
+	text-decoration:none;
+	color:#000;
+}
+
+#events a:hover {
+	border-width:thin;
+	border-color:#000;
+}
+
+#event_details {
+	position:absolute;
+	right:212px;
+	top:75px;
+	
+	width:600px;
+}
+
+#event_details_pic {
+	float: left;
+	margin-right: 20px;
+	margin-bottom: 200px;
+}
+
+#sidebar_map {
+	font-size:12px;
+	width:100px;
+	float:left;
+}
+#sidebar_map a{
+	display:block;	
+}
+
+
+/*
+#########################################
+/zing
+#########################################
+*/
+
+#zing_content{
+	text-align:center;
+	position:absolute;
+	right:212px;
+	//right:62px;
+	top:75px;
+	
+	width:600px;
+	padding-bottom:76px;
+}
+
+#bio {
+	width:900;	
+}
+
+
+#bio .pic{
+	float:left;
+	width:200px;
+	height:220px;
+		
+}
+
+#bio .text{
+	padding-left:20px;
+	float:left;
+	width:350px;
+	margin-bottom:100px;
+	
+}
+
+#zing_content .about{
+	text-align:left;
+	//font-size:large;
+	//overflow:auto;
+	//height:500px;
+	
+	padding-bottom:76px;
+}
+
+#zing_content .careers{
+	font-size:large;
+	width:600px;
+	left:150px;
+}
+
+#zing_content .support{
+	font-size:large;
+	width:600px;
+}
+
+#zing_content .contact{
+	font-size:large;
+	width:600px;
+}
+
+#zing_content .feedback{
+	font-size:large;
+	width:600px;
+}
+
+#zing_content .terms{
+	//overflow:auto;
+	padding-bottom:76px;
+	font-size:small;
+	width:600px;
+}
+.container {  
+    width:1024px;  
+    margin:0 auto;  
+	position:relative;
+    //border:1px solid red;  
+}
