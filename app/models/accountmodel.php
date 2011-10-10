@@ -2,7 +2,9 @@
 
 class Accountmodel extends CI_Model{
 	
-
+	/*$tables = array(
+		"nationalities" => array()
+	);*/
 /*    public function __construct($in = array(
         "first_name" => "", 
         "last_name" => "", 
@@ -303,29 +305,101 @@ class Accountmodel extends CI_Model{
 		return json_encode($stuff);
 	}
 	
+	function update_static($reltable,$idfield, $idarray){
+		$query = $this->db->query("DELETE FROM $reltable WHERE uid = ?",array($this->session->userdata('uid')));
+		if($idarray[0]!=""){
+			$nats = array();
+			$vals = array();
+			foreach($idarray as $i){
+				array_push($nats,$this->session->userdata('uid'));
+				array_push($nats, $i);
+				array_push($vals,"( ?, ?)");
+			}
+			$query = $this->db->query("INSERT IGNORE INTO $reltable (uid,$idfield) VALUES ".implode(" , ",$vals),$nats);
+		}
+		
+	}
+	
+	function update_new_single($table, $reltable,$idfield, $namefield, $namearray){
+		$query = $this->db->query("DELETE FROM $reltable WHERE uid = ?",array($this->session->userdata('uid')));
+		if($namearray!=""){
+			$dormid = $this->db->query("SELECT $idfield FROM $table WHERE $namefield = ?",array($form[$table]));
+			if($dormid->num_rows()>0){
+				$dormid = $dormid->row_array();
+				$dormid = $dormid[$idfield];
+			}else{
+				$query = $this->db->query("INSERT INTO $table ($namefield) VALUES (?)",array($form[$table]));	
+				$dormid = $this->db->query("SELECT $idfield FROM $table WHERE $namefield = ?",array($form[$table]));
+				$dormid = $dormid->row_array();
+				$dormid = $dormid[$idfield];
+			}
+			$query = $this->db->query("INSERT IGNORE INTO $reltable (uid,$idfield) VALUES (?, ?)",array($this->session->userdata('uid'),$dormid));
+		}
+	}
+	
+	function update_new_multi($table, $reltable,$idfield, $name, $data){
+		$query = $this->db->query("DELETE FROM $reltable WHERE uid = ?",array($this->session->userdata('uid')));
+		if($data[0]!=""){
+			foreach($data as $i){
+				$query = $this->db->query("SELECT $idfield FROM $table WHERE $name = ?",array($i));
+				if($query->num_rows()>0){
+					$result = $query->row_array();
+					$id = $result["$idfield"];
+				}else{
+					$query = $this->db->query("INSERT INTO $table ($name) VALUES (?)",array($i));	
+					$query = $this->db->query("SELECT $idfield FROM $table WHERE $name = ?",array($i));
+					$result = $query->row_array();
+					$id = $result["$idfield"];
+				}
+				$query = $this->db->query("INSERT IGNORE INTO $reltable (uid,$idfield) VALUES (?, ?)",array($this->session->userdata('uid'),$id));	
+			}
+		}
+	}
+	
+	function update_organizations($form){
+		Accountmodel::update_new_multi("organizations","is_member_of_organization","oid","name",$form['organizations']);
+		Accountmodel::update_new_multi("greeks","is_member_of_greek","greek_id","name",$form['greeks']);
+		Accountmodel::update_new_multi("workplaces","works_at","wid","name",$form['workplaces']);
+	}
+	
+	function update_interests($form){
+		Accountmodel::update_new_multi("favorite_music_artists","has_favorite_music_artist","artist_id","artist_name",$form['favorite_music_artists']);
+		Accountmodel::update_new_multi("favorite_heroes","has_favorite_hero","fhid","name",$form['favorite_heroes']);
+		Accountmodel::update_new_multi("favorite_movies","has_favorite_movie","movie_id","movie_title",$form['favorite_movies']);
+		Accountmodel::update_new_multi("favorite_tvshows","has_favorite_tvshow","tvshow_id","tvshow_title",$form['favorite_tvshows']);
+		Accountmodel::update_new_multi("favorite_sports_teams","has_favorite_sports_team","team_id","team_name",$form['favorite_sports_teams']);
+		Accountmodel::update_new_multi("favorite_video_games","has_favorite_video_game","video_game_id","video_game_title",$form['favorite_video_games']);
+		Accountmodel::update_new_multi("favorite_books","has_favorite_book","book_id","book_title",$form['favorite_books']);
+		Accountmodel::update_new_multi("favorite_foods","has_favorite_food","ffid","name",$form['favorite_foods']);
+	}
+	
 	function update_personal_info($form){
-		
-		$query = $this->db->query("DELETE FROM has_nationality WHERE uid = ?",array($this->session->userdata('uid')));
-		$nats = array();
-		$vals = array();
-		foreach($form['nationalities'] as $i){
-			array_push($nats,$this->session->userdata('uid'));
-			array_push($nats, $i);
-			array_push($vals,"( ?, ?)");
+		if($form['nationalities'][0]!=""){
+			$query = $this->db->query("DELETE FROM has_nationality WHERE uid = ?",array($this->session->userdata('uid')));
+			$nats = array();
+			$vals = array();
+			foreach($form['nationalities'] as $i){
+				array_push($nats,$this->session->userdata('uid'));
+				array_push($nats, $i);
+				array_push($vals,"( ?, ?)");
+			}
+			$query = $this->db->query("INSERT IGNORE INTO has_nationality (uid,nid) VALUES ".implode(" , ",$vals),$nats);
+			//return $this->db->affected_rows();
 		}
-		$query = $this->db->query("INSERT IGNORE INTO has_nationality (uid,nid) VALUES ".implode(" , ",$vals),$nats);
-		//return $this->db->affected_rows();
 		
-		$query = $this->db->query("DELETE FROM speaks_language WHERE uid = ?",array($this->session->userdata('uid')));
-		$langs = array();
-		$vals = array();
-		foreach($form['languages'] as $i){
-			array_push($langs,$this->session->userdata('uid'));
-			array_push($langs, $i);
-			array_push($vals,"( ?, ?)");
+		//print_r($form['languages']);
+		if($form['languages'][0]!=""){
+			$query = $this->db->query("DELETE FROM speaks_language WHERE uid = ?",array($this->session->userdata('uid')));
+			$langs = array();
+			$vals = array();
+			foreach($form['languages'] as $i){
+				array_push($langs,$this->session->userdata('uid'));
+				array_push($langs, $i);
+				array_push($vals,"( ?, ?)");
+			}
+			$query = $this->db->query("INSERT IGNORE INTO speaks_language (uid,langid) VALUES ".implode(" , ",$vals),$langs);
+			//return $this->db->affected_rows();
 		}
-		$query = $this->db->query("INSERT IGNORE INTO speaks_language (uid,langid) VALUES ".implode(" , ",$vals),$langs);
-		//return $this->db->affected_rows();
 		
 		$query = $this->db->query("DELETE FROM has_dorm WHERE uid = ?",array($this->session->userdata('uid')));
 		if($form['dorm']!=""){
@@ -376,6 +450,44 @@ class Accountmodel extends CI_Model{
 		
 	}
 	
+	
+	function update_academics($form){
+
+		$query = $this->db->query("DELETE FROM is_taking_course WHERE uid = ?",array($this->session->userdata('uid')));
+		if($form['courses'][0]!=""){
+			foreach($form['courses'] as $i){
+				$query = $this->db->query("SELECT courseid FROM courses WHERE course_name = ?",array($i));
+				if($query->num_rows()>0){
+					$result = $query->row_array();
+					$id = $result['courseid'];
+				}else{
+					$query = $this->db->query("INSERT INTO courses (course_name) VALUES (?)",array($i));	
+					$query = $this->db->query("SELECT courseid FROM courses WHERE course_name = ?",array($i));
+					$result = $query->row_array();
+					$id = $result['courseid'];
+				}
+				$query = $this->db->query("INSERT IGNORE INTO is_taking_course (uid,courseid) VALUES (?, ?)",array($this->session->userdata('uid'),$id));	
+			}
+		}
+		
+		
+		$query = $this->db->query("DELETE FROM has_major WHERE uid = ?",array($this->session->userdata('uid')));
+		if($form['majors'][0]!=""){
+			$langs = array();
+			$vals = array();
+			foreach($form['majors'] as $i){
+				array_push($langs,$this->session->userdata('uid'));
+				array_push($langs, $i);
+				array_push($vals,"( ?, ?)");
+			}
+			$query = $this->db->query("INSERT IGNORE INTO has_major (uid,mid) VALUES ".implode(" , ",$vals),$langs);
+		}
+		
+		
+		
+		
+	}
+	
 	function get_personal_info($uid){
 			$data = array( $uid );
 			$query = $this->db->query(
@@ -421,6 +533,98 @@ class Accountmodel extends CI_Model{
 			);
 			
 			return $result;
+				
+	}
+	
+	function get_academics($uid){
+			$data = array( $uid );
+			$query = $this->db->query(
+				"SELECT courses.courseid, courses.course_name
+				 FROM courses, is_taking_course
+				 WHERE courses.courseid=is_taking_course.courseid
+				 	AND is_taking_course.uid=?",
+			$data);
+			$courses = $query->result_array();
+			
+			$query = $this->db->query(
+				"SELECT majors.mid, majors.major 
+				 FROM majors,has_major 
+				 WHERE majors.mid=has_major.mid 
+					AND has_major.uid=?",
+			$data);
+			$majors = $query->result_array();
+			
+			
+			$result = array(
+				"courses" => $courses,
+				"majors" => $majors
+			);
+			
+			return $result;
+				
+	}
+	
+	function get_organizations($uid){
+			$data = array( $uid );
+			$query = $this->db->query(
+				"SELECT organizations.oid, organizations.name
+				 FROM organizations, is_member_of_organization
+				 WHERE organizations.oid=is_member_of_organization.oid
+				 	AND is_member_of_organization.uid=?",
+			$data);
+			$organizations = $query->result_array();
+			
+			$query = $this->db->query(
+				"SELECT workplaces.wid, workplaces.name 
+				 FROM workplaces,works_at 
+				 WHERE workplaces.wid=works_at.wid 
+					AND works_at.uid=?",
+			$data);
+			$workplaces = $query->result_array();
+			
+			$query = $this->db->query(
+				"SELECT greeks.greek_id, greeks.name 
+				 FROM greeks,is_member_of_greek 
+				 WHERE greeks.greek_id=is_member_of_greek.greek_id 
+					AND is_member_of_greek.uid=?",
+			$data);
+			$greeks = $query->result_array();
+			
+			
+			$result = array(
+				"organizations" => $organizations,
+				"workplaces" => $workplaces,
+				"greeks" => $greeks
+			);
+			
+			return $result;
+				
+	}
+	
+	function get_relations($table,$reltable,$id,$name,$uid){
+		$data = array($uid);
+		$query = $this->db->query(
+			"SELECT $table.$id, $table.$name
+			 FROM $table, $reltable
+			 WHERE $table.$id=$reltable.$id
+				AND $reltable.uid=?",
+		$data);
+		return $query->result_array();
+	}
+	
+	function get_interests($uid){
+		$result = array(
+			"favorite_music_artists" => Accountmodel::get_relations("favorite_music_artists","has_favorite_music_artist","artist_id","artist_name",$uid),
+			"favorite_heroes" => Accountmodel::get_relations("favorite_heroes","has_favorite_hero","fhid","name",$uid),
+			"favorite_movies" => Accountmodel::get_relations("favorite_movies","has_favorite_movie","movie_id","movie_title",$uid),
+			"favorite_tvshows" => Accountmodel::get_relations("favorite_tvshows","has_favorite_tvshow","tvshow_id","tvshow_title",$uid),
+			"favorite_sports_teams" => Accountmodel::get_relations("favorite_sports_teams","has_favorite_sports_team","team_id","team_name",$uid),
+			"favorite_video_games" => Accountmodel::get_relations("favorite_video_games","has_favorite_video_game","video_game_id","video_game_title",$uid),
+			"favorite_books" => Accountmodel::get_relations("favorite_books","has_favorite_book","book_id","book_title",$uid),
+			"favorite_foods" => Accountmodel::get_relations("favorite_foods","has_favorite_food","ffid","name",$uid)
+		);
+		
+		return $result;
 				
 	}
 	

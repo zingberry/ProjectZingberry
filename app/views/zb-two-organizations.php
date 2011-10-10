@@ -99,7 +99,7 @@ $(document).ready(function() {
     	
         <div id="body">
         	<h2>Organizations</h2>
-        	<form name="frm_login" action="#" method="post">
+        	<form name="frm_login" action="<?=current_url()?>" method="post">
                 <ul class="form_account">
                     <li>Organizations</li>
                     <li><input id="organizations" type="text" name="organizations"/></li>
@@ -110,7 +110,7 @@ $(document).ready(function() {
 								tokenValue: 'name',
 								theme: "facebook",
 								method: "post",
-								/*prePopulate: <?=$user['languages']?>*/
+								prePopulate: <?=$user['organizations']?>
 							});
 						});
 					</script>
@@ -119,11 +119,12 @@ $(document).ready(function() {
                     <script type="text/javascript">
 						$(document).ready(function() {
 							$("#greeks").tokenInput("<?=site_url("account/json_token/greeks")?>", {
-								/*allowNewTokens: true,*/
-								tokenValue: 'id',
+								allowNewTokens: true,
+								tokenLimit: 3,
+								tokenValue: 'name',
 								theme: "facebook",
 								method: "post",
-								/*prePopulate: <?=$user['greeks']?>*/
+								prePopulate: <?=$user['greeks']?>
 							});
 						});
 					</script>
@@ -136,11 +137,11 @@ $(document).ready(function() {
 								tokenValue: 'name',
 								theme: "facebook",
 								method: "post",
-								/*prePopulate: <?=$user['workplaces']?>*/
+								prePopulate: <?=$user['workplaces']?>
 							});
 						});
 					</script>
-                    
+                    <li><input type="submit" name="organizations_update" class="sub" value="Save Changes" /> </li>
                 </ul>
             </form>
         </div>

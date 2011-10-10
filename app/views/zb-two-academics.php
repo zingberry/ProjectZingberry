@@ -98,7 +98,7 @@ $(document).ready(function() {
     	
         <div id="body">
         	<h2>Academics</h2>
-        	<form name="frm_login" action="#" method="post">
+        	<form name="frm_login" action="<?=current_url()?>" method="post">
                 <ul class="form_account">
                     <li>Major</li>
                     <li><input id="majors" type="text" name="majors"/></li>
@@ -110,7 +110,7 @@ $(document).ready(function() {
 								tokenValue: 'id',
 								theme: "facebook",
 								method: "post",
-								/*prePopulate: <?=$user['majors']?>*/
+								prePopulate: <?=$user['majors']?>
 							});
 						});
 					</script>
@@ -126,8 +126,8 @@ $(document).ready(function() {
 								method: "post",
 								tokenValidator: function(token){
 									return /^[0-9]{2,3}:[0-9]{3}:[0-9A-Z]{2}$/i.test(token);	
-								}
-								/*prePopulate: <?=$user['courses']?>*/
+								},
+								prePopulate: <?=$user['courses']?>
 							});
 						});
 					</script>
@@ -148,7 +148,8 @@ $(document).ready(function() {
                     <li>Class Eight</li>
                     <li><input type="text" name="txt_name2"/></li>
                     <li>Class Nine</li>
-                    <li><input type="text" name="txt_name2"/></li>-->                 
+                    <li><input type="text" name="txt_name2"/></li>-->            
+                	<input type="submit" name="academics_update" class="sub" value="Save Changes" />     
                 </ul>
             </form>
         </div>

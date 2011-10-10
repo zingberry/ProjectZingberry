@@ -7,8 +7,10 @@
 <base href="<?php echo $this->config->item('base_url') ?>" />
 <link href="css/reset.css" type="text/css" media="all" rel="stylesheet" />
 <link href="css/style.css" type="text/css" media="all" rel="stylesheet" />
+<link href="css/token-input-facebook.css" type="text/css" media="all" rel="stylesheet" />
 
 <script type="text/javascript" src="js/jquery_003.js"></script>
+<script type="text/javascript" src="js/jquery.tokeninput.js"></script>
 <script type="text/javascript" src="js/blur.js"></script>
 <script type="text/javascript">
 $(function(){ 
@@ -96,24 +98,113 @@ $(document).ready(function() {
     	
         <div id="body">
         	<h2>Interest</h2>
-        	<form name="frm_login" action="#" method="post">
+        	<form name="frm_login" action="<?=current_url()?>" method="post">
                 <ul class="form_account">
                     <li>Favorite Music Artists</li>
-                    <li><input type="text" name="txt_name"/></li>
+                    <li><input id="favorite_music_artists" type="text" name="favorite_music_artists"/></li>
+                    <script type="text/javascript">
+						$(document).ready(function() {
+							$("#favorite_music_artists").tokenInput("<?=site_url("account/json_token/favorite_music_artists")?>", {
+								allowNewTokens: true,
+								tokenValue: 'name',
+								theme: "facebook",
+								method: "post",
+								prePopulate: <?=$user['favorite_music_artists']?>
+							});
+						});
+					</script>
                     <li>Favorite Heroes</li>
-                    <li><input type="text" name="txt_name1"/></li>
+                    <li><input id="favorite_heroes" type="text" name="favorite_heroes"/></li>
+                    <script type="text/javascript">
+						$(document).ready(function() {
+							$("#favorite_heroes").tokenInput("<?=site_url("account/json_token/favorite_heroes")?>", {
+								allowNewTokens: true,
+								tokenValue: 'name',
+								theme: "facebook",
+								method: "post",
+								prePopulate: <?=$user['favorite_heroes']?>
+							});
+						});
+					</script>
                     <li>Favorite Movies</li>
-                    <li><input type="text" name="txt_name1"/></li>
+                    <li><input id="favorite_movies" type="text" name="favorite_movies"/></li>
+                    <script type="text/javascript">
+						$(document).ready(function() {
+							$("#favorite_movies").tokenInput("<?=site_url("account/json_token/favorite_movies")?>", {
+								allowNewTokens: true,
+								tokenValue: 'name',
+								theme: "facebook",
+								method: "post",
+								prePopulate: <?=$user['favorite_movies']?>
+							});
+						});
+					</script>
                     <li>Favorite TV Shows</li>
-                    <li><input type="text" name="txt_name1"/></li>
+                    <li><input id="favorite_tvshows" type="text" name="favorite_tvshows"/></li>
+                    <script type="text/javascript">
+						$(document).ready(function() {
+							$("#favorite_tvshows").tokenInput("<?=site_url("account/json_token/favorite_tvshows")?>", {
+								allowNewTokens: true,
+								tokenValue: 'name',
+								theme: "facebook",
+								method: "post",
+								prePopulate: <?=$user['favorite_tvshows']?>
+							});
+						});
+					</script>
                     <li>Favorite Sports Teams</li>
-                    <li><input type="text" name="txt_name1"/></li>
+                    <li><input id="favorite_sports_teams" type="text" name="favorite_sports_teams"/></li>
+                    <script type="text/javascript">
+						$(document).ready(function() {
+							$("#favorite_sports_teams").tokenInput("<?=site_url("account/json_token/favorite_sports_teams")?>", {
+								allowNewTokens: true,
+								tokenValue: 'name',
+								theme: "facebook",
+								method: "post",
+								prePopulate: <?=$user['favorite_sports_teams']?>
+							});
+						});
+					</script>
                     <li>Favorite Video Games</li>
-                    <li><input type="text" name="txt_name1"/></li>
+                    <li><input id="favorite_video_games" type="text" name="favorite_video_games"/></li>
+                    <script type="text/javascript">
+						$(document).ready(function() {
+							$("#favorite_video_games").tokenInput("<?=site_url("account/json_token/favorite_video_games")?>", {
+								allowNewTokens: true,
+								tokenValue: 'name',
+								theme: "facebook",
+								method: "post",
+								prePopulate: <?=$user['favorite_video_games']?>
+							});
+						});
+					</script>
                     <li>Favorite Books</li>
-                    <li><input type="text" name="txt_name1"/></li>
+                    <li><input id="favorite_books" type="text" name="favorite_books"/></li>
+                    <script type="text/javascript">
+						$(document).ready(function() {
+							$("#favorite_books").tokenInput("<?=site_url("account/json_token/favorite_books")?>", {
+								allowNewTokens: true,
+								tokenValue: 'name',
+								theme: "facebook",
+								method: "post",
+								prePopulate: <?=$user['favorite_books']?>
+							});
+						});
+					</script>
                     <li>Favorite Foods</li>
-                    <li><input type="text" name="txt_name2"/></li>
+                    <li><input id="favorite_foods" type="text" name="favorite_foods"/></li>
+                    <script type="text/javascript">
+						$(document).ready(function() {
+							$("#favorite_foods").tokenInput("<?=site_url("account/json_token/favorite_foods")?>", {
+								allowNewTokens: true,
+								tokenValue: 'name',
+								theme: "facebook",
+								method: "post",
+								prePopulate: <?=$user['favorite_foods']?>
+							});
+						});
+					</script>
+                	<input type="submit" name="interests_update" class="sub" value="Save Changes" />     
                    
                 </ul>
             </form>

@@ -7,14 +7,7 @@ class Account extends CI_Controller {
 		parent::CI_Controller();
 	}*/
 	
-	function personal(){
-		$this->load->model('accountmodel');
-		$data = array();
-		
-		echo json_encode($data);
-		
-		print_r($data);
-	}
+
 	
 	function usercount(){
 		$this->load->model('accountmodel');
@@ -31,19 +24,98 @@ class Account extends CI_Controller {
 	function organizations(){
 		Account::is_logged_in();
 		
-		$this->load->view('zb-two-organizations');	
+		$this->load->model('accountmodel');
+		if($this->input->post("organizations_update")){
+			//echo print_r($this->input->post());
+			//$update = $this->input->post();
+			$update = array();
+			$update['organizations'] = explode(",",$this->input->post("organizations"));
+			$update['greeks'] = explode(",",$this->input->post("greeks"));
+			$update['workplaces'] = explode(",",$this->input->post("workplaces"));
+			//echo print_r($update);
+			$this->accountmodel->update_organizations($update);
+			
+			
+		}
+		
+		$stuff = $this->accountmodel->get_organizations($this->session->userdata('uid'));
+		$data["user"] = array();
+		
+		$data["user"]["organizations"] = Account::result_to_token($stuff['organizations'],"oid","name");
+		$data["user"]["greeks"] = Account::result_to_token($stuff['greeks'],"greek_id","name");
+		$data["user"]["workplaces"] = Account::result_to_token($stuff['workplaces'],"wid","name");
+		
+		$this->load->view('zb-two-organizations',$data);	
 	}
+
 	
 	function academics(){
 		Account::is_logged_in();
 		
-		$this->load->view('zb-two-academics');	
+		
+		$this->load->model('accountmodel');
+		if($this->input->post("academics_update")){
+			//echo print_r($this->input->post());
+			//$update = $this->input->post();
+			$update = array();
+			$update['majors'] = explode(",",$this->input->post("majors"));
+			$update['courses'] = explode(",",$this->input->post("courses"));
+			//echo print_r($update);
+			$this->accountmodel->update_academics($update);
+			
+			
+		}
+		
+		$stuff = $this->accountmodel->get_academics($this->session->userdata('uid'));
+		$data["user"] = array();
+		
+		$data["user"]["courses"] = Account::result_to_token($stuff['courses'],"courseid","course_name");
+		$data["user"]["majors"] = Account::result_to_token($stuff['majors'],"mid","major");
+		
+		
+		//print_r($data);
+		$this->load->view('zb-two-academics',$data);	
 	}
 	
 	function interests(){
 		Account::is_logged_in();
 		
-		$this->load->view('zb-two-interests');	
+		$this->load->model('accountmodel');
+		if($this->input->post("interests_update")){
+			//echo print_r($this->input->post());
+			//$update = $this->input->post();
+			$update = array();
+			$update['favorite_music_artists'] = explode(",",$this->input->post("favorite_music_artists"));
+			$update['favorite_heroes'] = explode(",",$this->input->post("favorite_heroes"));
+			$update['favorite_movies'] = explode(",",$this->input->post("favorite_movies"));
+			$update['favorite_tvshows'] = explode(",",$this->input->post("favorite_tvshows"));
+			$update['favorite_sports_teams'] = explode(",",$this->input->post("favorite_sports_teams"));
+			$update['favorite_video_games'] = explode(",",$this->input->post("favorite_video_games"));
+			$update['favorite_books'] = explode(",",$this->input->post("favorite_books"));
+			$update['favorite_foods'] = explode(",",$this->input->post("favorite_foods"));
+			//echo print_r($update);
+			$this->accountmodel->update_interests($update);
+			
+			
+		}
+		
+		$stuff = $this->accountmodel->get_interests($this->session->userdata('uid'));
+		
+		$data["user"] = array();
+		
+		$data["user"]["favorite_music_artists"] = Account::result_to_token($stuff['favorite_music_artists'],"artist_id","artist_name");
+		$data["user"]["favorite_heroes"] = Account::result_to_token($stuff['favorite_heroes'],"fhid","name");
+		$data["user"]["favorite_movies"] = Account::result_to_token($stuff['favorite_movies'],"movie_id","movie_title");
+		$data["user"]["favorite_tvshows"] = Account::result_to_token($stuff['favorite_tvshows'],"tvshow_id","tvshow_title");
+		$data["user"]["favorite_sports_teams"] = Account::result_to_token($stuff['favorite_sports_teams'],"team_id","team_name");
+		$data["user"]["favorite_video_games"] = Account::result_to_token($stuff['favorite_video_games'],"video_game_id","video_game_title");
+		$data["user"]["favorite_books"] = Account::result_to_token($stuff['favorite_books'],"book_id","book_title");
+		$data["user"]["favorite_foods"] = Account::result_to_token($stuff['favorite_foods'],"ffid","name");
+		
+		
+		//print_r($data);
+		
+		$this->load->view('zb-two-interests',$data);	
 	}
 	
 	function picture(){
@@ -81,8 +153,8 @@ class Account extends CI_Controller {
 				case 'favorite_foods':
 					echo $this->accountmodel->json_token("favorite_foods","ffid","name",$this->input->post("q"));
 					break;
-				case 'favorite_heros':
-					echo $this->accountmodel->json_token("favorite_heros","fhid","name",$this->input->post("q"));
+				case 'favorite_heroes':
+					echo $this->accountmodel->json_token("favorite_heroes","fhid","name",$this->input->post("q"));
 					break;
 				case 'favorite_movies':
 					echo $this->accountmodel->json_token("favorite_movies","movie_id","movie_title",$this->input->post("q"));
@@ -105,6 +177,9 @@ class Account extends CI_Controller {
 				case 'organizations':
 					echo $this->accountmodel->json_token("organizations","oid","name",$this->input->post("q"));
 					break;
+				case 'workplaces':
+					echo $this->accountmodel->json_token("workplaces","wid","name",$this->input->post("q"));
+					break;
 				default:
 					echo json_encode(array());	
 					break;
@@ -113,6 +188,19 @@ class Account extends CI_Controller {
 		
 	}
 	
+		
+	private function result_to_token($row,$id,$name){
+		$token = array();
+		foreach($row as $i){
+			array_push($token,	
+				array(
+					"id" => $i["$id"],
+					"name" => $i["$name"]
+				)
+			);
+		}
+		return json_encode($token);
+	}
 	
 	function index(){
 		if(!$this->session->userdata('uid'))
@@ -148,29 +236,8 @@ class Account extends CI_Controller {
 			));
 		}
 		
-		
-		$data['user']["languages"] = array();
-		foreach($stuff['languages'] as $i){
-			array_push($data['user']["languages"],	
-				array(
-					"id" => $i['langid'],
-					"name" => $i['language']
-				)
-			);
-		}
-		
-		$data['user']["nationalities"] = array();
-		foreach($stuff['nationalities'] as $i){
-			array_push($data['user']["nationalities"],	
-				array(
-					"id" => $i['nid'],
-					"name" => $i['nationality']
-				)
-			);
-		}
-		$data["user"]["languages"] = json_encode($data["user"]["languages"]);
-		$data["user"]["nationalities"] = json_encode($data["user"]["nationalities"]);
-		$data["user"]["dorm"] = "[".json_encode($data["dorm"])."]";
+		$data["user"]["languages"] = Account::result_to_token($stuff['languages'],"langid","language");
+		$data["user"]["nationalities"] = Account::result_to_token($stuff['nationalities'],"nid","nationality");
 		$data["user"]["dorm"] = json_encode($data["dorm"]);
 		$data["user"]["highschool"] = json_encode($data["highschool"]);
 		
@@ -360,7 +427,7 @@ class Account extends CI_Controller {
 		
 	}
 	
-	function password($data){
+	private function password($data){
 		$this->load->model('accountmodel');
 		echo $this->accountmodel->password_hash($data);
 	}
