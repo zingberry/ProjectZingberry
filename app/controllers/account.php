@@ -585,51 +585,32 @@ class Account extends CI_Controller {
         $error["count"] = 0;
 
         //$error["email"] = "";
-        //$pstr = "/^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@eden.rutgers.edu$/";
-		$pstr = "/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/";
-        if(!preg_match($pstr , $this->input->post('email'))) {
+        $eden = "/^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@eden.rutgers.edu$/";
+		$scarlet = "/^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@scarletmail.rutgers.edu$/";
+		$standard = "/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/";
+		
+		//if(!preg_match($eden , $this->input->post('email')) && !preg_match($scarlet , $this->input->post('email'))) {
+        if(!preg_match($standard , $this->input->post('email'))) {
             $error["email"] = 'You must enter a valid Rutgers student email! (*@eden.rutgers.edu)';
             $error["count"] += 1;
         }
         else {
-			
 			$this->load->model('accountmodel');
 			if($this->accountmodel->is_registered()){
-				$error["email"] = "This email has already been registered and verified!";
+				$error["email"] = "This user already exists!";
                 $error["count"] += 1;
 			} 
         }
 
-        //$error["firstname"] = "";
-        $pstr = "/\b[a-zA-Z]+\b/";
-        if(!preg_match($pstr, $this->input->post("firstname"))) {
-            $error["firstname"] = "Enter a real first name!";
+        $pstr = "/\b[a-z A-Z]+\b/";
+        if(!preg_match($pstr, $this->input->post("name"))) {
+            $error["name"] = "Enter a real name!";
             $error["count"] += 1;
         }
 
-        //$error["lastname"] = "";
-        $pstr = "/\b[a-zA-Z]+\b/";
-        if(!preg_match($pstr, $this->input->post("lastname"))) {
-            $error["lastname"] = "Enter a real last name!";
-            $error["count"] += 1;
-        }
-
-       // $error["confirmpassword"] = "";
         $plen = strlen($this->input->post("password"));
         if($plen > 32 || $plen < 6){
-            $error["password"] = "Passwords must be between 6-32 characters!";
-            $error["count"] += 1;
-        }
-        /* OLD confirm code 
-		else if(strcmp($this->input->post("password"), $this->input->post("confirmpassword")) != 0) {
-            $error["confirmpassword"] = "Passwords do not match!";
-            $error["count"] += 1;
-        }*/
-		
-		// error["gender"] = "";
-		$pstr = "/^[mf]$/";
-        if(!preg_match($pstr, $this->input->post("gender"))) {
-            $error["gender"] = "Enter an approprate gender!";
+            $error["password"] = "Password must be between 6-32 characters!";
             $error["count"] += 1;
         }
 		

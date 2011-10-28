@@ -14,6 +14,18 @@
 <script type="text/javascript" src="js/blur.js"></script>
 <script type="text/javascript" src="js/jquery.bubblepopup.v2.3.1.min.js"></script>
 <script type="text/javascript">
+$.extend({URLEncode:function(c){var o='';var x=0;c=c.toString();var r=/(^[a-zA-Z0-9_.]*)/;
+  while(x<c.length){var m=r.exec(c.substr(x));
+    if(m!=null && m.length>1 && m[1]!=''){o+=m[1];x+=m[1].length;
+    }else{if(c[x]==' ')o+='+';else{var d=c.charCodeAt(x);var h=d.toString(16);
+    o+='%'+(h.length<2?'0':'')+h.toUpperCase();}x++;}}return o;},
+URLDecode:function(s){var o=s;var binVal,t;var r=/(%[^%]{2})/;
+  while((m=r.exec(o))!=null && m.length>1 && m[1]!=''){b=parseInt(m[1].substr(1),16);
+  t=String.fromCharCode(b);o=o.replace(m[1],t);}return o;}
+});
+
+</script>
+<script type="text/javascript">
 $(function(){ 
 			    // find all the input elements with title attributes
 				$('input[title!=""]').hint();
@@ -88,6 +100,10 @@ $(document).ready(function() {
 		
 		
 	$('a.poplight[href^=#]').click(function() {
+		$("form#video_request  #uid").val( 
+			$(this).parent().parent().parent().find("input#uid").val()
+		); //get uid from tile and put it in the request form
+		$("form#video_request  #message").val(""); // Clear old input from message textarea
 		var popID = $(this).attr('rel'); //Get Popup Name
 		var popURL = $(this).attr('href'); //Get Popup href to define size
 		var user = $(this).attr('title');// get the username to be sent	
@@ -122,6 +138,9 @@ $(document).ready(function() {
 	$('a.close, #fade,#close').live('click', function() { //When clicking on the close or fade layer...
 	  	$('#fade , .popup_block').fadeOut(function() {
 			$('#fade, a.close').remove();  
+			$("form#video_request").show();
+			$("div#request_success").hide();
+			$("div#request_failed").hide();
 		}); //fade them both out
 		
 		return false;
@@ -129,6 +148,29 @@ $(document).ready(function() {
 	
 	  
 });			
+	function send_request(){
+		$("form#video_request").hide(); //hide the request form
+		var request_url = "<?=site_url("videorequest/request")?>" /*+ 
+			"/" + $("form#video_request  #uid").val()  +
+			"/" + $.URLEncode($("form#video_request  #message").val())*/;
+		var postdata = {
+			"uid": $("form#video_request  #uid").val(),
+			"message": $("form#video_request  #message").val()
+		};
+		$.ajax({ //send ajax chat request
+			url: request_url,
+			cache:false,
+			type: "POST",
+  			data: postdata,
+			success: function(message) {
+				if(message.numrequested > 0)
+					$("div#request_success").show(); //show success
+				else 
+					$("div#request_failed").show(); //show success
+			}
+		});
+	}
+
 </script>
 
 <title>Zingberry!</title>
@@ -153,6 +195,7 @@ $(document).ready(function() {
         	<ul class="outer">
             <?php foreach( $users as $u){ ?>
         		<li>
+                	<input type="hidden" id="uid" value="<?=$u['user']['uid']?>" />
                 	<div class="hovername" style="
                         position: absolute;
                         margin-left: 5px;
@@ -237,12 +280,15 @@ $(document).ready(function() {
         </div>
     </div>   
 <div id="popup5" class="popup_block">
-    <form name="frm_request" action="#" method="post">
+	<div id="request_success" style="display:none; text-align:center;"> Request sent successfully </div>
+	<div id="request_failed" style="display:none; text-align:center;"> Request failed to send </div>
+    <form id="video_request" name="video_request" action="javascript:send_request();" method="post">
+    	<input type="hidden" id="uid" value="21" />
         <ul id="form">
             <li class="lbl">User Name:</li>
             <li class="input"><input type="text" class="txt_small" value="" id="user_name" readonly="readonly" /></li>
             <li class="lbl">Your Message: </li>
-            <li class="input"><textarea name="message" class="txt_area" cols="35" rows="4"></textarea></li>
+            <li class="input"><textarea id="message" name="message" class="txt_area" cols="35" rows="4"></textarea></li>
             <li class="lbl">&nbsp;</li>
             <li class="input"><input type="submit" value="Send" class="btn" />&nbsp;&nbsp;<input type="button" value="Cancel" id="close" class="btn" /></li>
         </ul>

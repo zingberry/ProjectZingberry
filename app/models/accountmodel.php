@@ -705,9 +705,10 @@ class Accountmodel extends CI_Model{
 	
 	function get_random_uids($limit){
 		$data = array(
+			$this->session->userdata('uid'),
 			$limit
 		);
-		$query = $this->db->query("SELECT uid FROM users WHERE uid >= (SELECT FLOOR( MAX(uid) * RAND()) FROM users ) ORDER BY uid LIMIT ?",$data);
+		$query = $this->db->query("SELECT uid FROM users WHERE uid != ? AND uid >= (SELECT FLOOR( MAX(uid) * RAND()) FROM users ) ORDER BY uid LIMIT ?",$data);
 		
 		$result = array();
 		foreach($query->result_array() as $i){
