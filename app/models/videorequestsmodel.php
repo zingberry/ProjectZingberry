@@ -1,7 +1,37 @@
 <?php
 
-class Videorequestsmodel extends CI_Model{
-			
+// This is the model that handles video requests (deletion, creation)
+class Videorequestsmodel extends CI_Model{				
+	
+	// This Model uses 2 constants
+	// $default_time_to_live - default time to live (in days) for chat requests
+	// $timetolive - time to live (in minutes) for online users in video registrations table
+	//
+	// Default time to live now is 30 days
+	public function __construct()
+    {
+        parent::__construct();
+    }
+	
+	// Deletes all requests that have expired, i.e. (NOW() - daterequested) > timetolive
+	//
+	// it uses the default time to live value defined above
+	function delete_expired_requests_default_ttl()
+	{
+		$default_time_to_live = '30'; // default time to live (in days)
+		
+		$this->load->database();
+		$str = "DELETE FROM videochat_requests
+				WHERE NOW() > DATE_ADD(date_requested, INTERVAL ? DAY);";
+				
+		$data = array($default_time_to_live);
+		
+		$query = $this->db->query($str, $data);
+		
+		// returns the rows that were deleted, i.e. the expired requests
+		return $this->db->affected_rows();		
+	}
+	
 	// Deletes all requests that have expired, i.e. (NOW() - daterequested) > timetolive
 	//
 	// $timetolive - number of days after which a request expires
@@ -9,7 +39,7 @@ class Videorequestsmodel extends CI_Model{
 	{
 		$this->load->database();
 		$str = "DELETE FROM videochat_requests
-				WHERE NOW() > DATE_ADD(date_requested, INTERVAL ? DAY);"
+				WHERE NOW() > DATE_ADD(date_requested, INTERVAL ? DAY);";
 				
 		$data = array($timetolive);
 		
@@ -27,7 +57,7 @@ class Videorequestsmodel extends CI_Model{
 	{
 		$this->load->database();
 		$str = "DELETE FROM videochat_requests
-				WHERE requestor_uid = ? AND target_uid = ?;"
+				WHERE requestor_uid = ? AND target_uid = ?;";
 				
 		$data = array($r_uid, $t_uid);
 		
@@ -45,7 +75,7 @@ class Videorequestsmodel extends CI_Model{
 	{
 		$this->load->database();
 		$str = "DELETE FROM videochat_requests
-				WHERE requestor_uid = ?;"
+				WHERE requestor_uid = ?;";
 				
 		$data = array($r_uid);
 		
@@ -63,7 +93,7 @@ class Videorequestsmodel extends CI_Model{
 	{
 		$this->load->database();
 		$str = "DELETE FROM videochat_requests
-				WHERE target_uid = ?;"
+				WHERE target_uid = ?;";
 				
 		$data = array($t_uid);
 		
@@ -129,7 +159,7 @@ class Videorequestsmodel extends CI_Model{
 	}
 	
 	
-	// Fetches any requests where the requestor is user with id $r_uid
+	// Fetches any requests (as result array) where the requestor is user with id $r_uid
 	// (requests are ordered by date requested in descending order, i.e., newest is first)
 	//
 	// $r_uid - id of requestor user to look up
@@ -163,50 +193,60 @@ class Videorequestsmodel extends CI_Model{
 		
 		// return the records found or null if no requests found
 		if ($query->num_rows() > 0)
-			return $query->row();
+			return $query->result_array();
 		else
 			return NULL;		
 	}	
 	
 	
-	// Fetches any requests where the target is user with id $t_uid
+	// Fetches any requests (as a result array) where the target is user with id $t_uid
 	// (requests are ordered by date requested in descending order, i.e., newest is first)
 	//
 	// $t_uid - id of target user to look up
-	// $online_flag - boolean value, if true it returns only those requests for which
+	// $online_flag - integer value, if 1 (=true) it returns only those requests for which
 	// 					the requestor is currently online (online status is determined
 	//					by looking for the user's entry in the videochat_registrations table),
-	//				  if false, it returns all matching requests
-	// $order_flag - integer value {0, 1, -1} : 0 (or null) means no sorting
-	//											1 sorts ascending by date_requested
-	//											-1 sorts descending by date_requested
+	//				  if 0 (=false), it returns all matching requests
+	// $order_flag - integer value {0, 1, 2} : 0 (or null) means no sorting
+	//											1 sorts descending by date_requested
+	//											2 sorts ascending by date_requested
+	//
+	// By default, the time-to-live of chat identities, and hence the online status
+	// of a user is set to 2 minutes.
 	function lookup_requests_by_target($t_uid, $online_flag, $order_flag)
 	{
+		$timetolive = '2'; // time to live (in minutes) for online users in video registrations table
+		
 		$this->load->database();
 		
-		if (!isset($online_flag) || !$online_flag)
+		// form query string
+		if (!isset($online_flag) || $online_flag < 1)
 		{
 			// flag was false, so return all, regardless of online status
-			$str = "SELECT requestor_uid, date_requested, request_message
-					FROM videochat_requests 
-					WHERE target_uid=?";							
+			$str = "SELECT requestor_uid, firstname, lastname, date_requested, request_message
+					FROM users U, videochat_requests Q
+					WHERE Q.target_uid=? AND U.uid = Q.requestor_uid";
+			$data = array($t_uid);
 		}
 		else
 		{
 			// flag was true, so return only those requests with an online requestor
-			$str = "SELECT requestor_uid, date_requested, request_message 
-					FROM videochat_requests Q, videochat_registrations R 
-					WHERE Q.requestor_uid = R.uid AND Q.target_uid = ?";
+			// now <= m_updatetime + timetolive
+			$str = "SELECT requestor_uid, firstname, lastname, date_requested, request_message 
+					FROM users U, videochat_requests Q, videochat_registrations R 
+					WHERE Q.requestor_uid = R.uid AND Q.target_uid = ? AND U.uid = R.uid AND NOW() <= DATE_ADD(R.m_updatetime, INTERVAL ? MINUTE)";
+			$data = array($t_uid, $timetolive);
 		}
 		
+		// update query string depending on order flag
 		if (isset($order_flag))
 		{
-			if ($order_flag > 0)
+			if ($order_flag == 2)
 			{
 				// sort ascending
 				$str = $str . " ORDER BY Q.date_requested ASC";
 			}		
-			elseif ($order_flag < 0)
+			elseif ($order_flag == 1)
 			{
 				// sort descending
 				$str = $str . " ORDER BY Q.date_requested DESC";
@@ -214,14 +254,12 @@ class Videorequestsmodel extends CI_Model{
 		}
 		$str = $str . ";";	
 		
-		$data = array($t_uid);
-		
 		$query = $this->db->query($str, $data);
 		
 		// return the records found or null if no requests found
 		if ($query->num_rows() > 0)
-			return $query->row();
+			return $query->result_array();
 		else
 			return NULL;		
-	}
+	}	
 }

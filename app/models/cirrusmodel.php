@@ -2,12 +2,37 @@
 
 // This is the model that handles user registration, deregistration and lookup for videochats
 class Cirrusmodel extends CI_Model{
-			
+						
+	public function __construct()
+	{
+		parent::__construct();			
+	}
+	
 	// Fetches the name of a user
 	function get_name_by_uid($uid)
 	{
 		$this->load->database();
 		$str = "SELECT firstname
+				FROM users
+				WHERE uid=?;";
+				
+		$data = array($uid);
+		
+		$query = $this->db->query($str, $data);
+		
+		// return the single record with this user's name, 
+		// or return NULL if a user with given uid was not found
+		if ($query->num_rows() > 0)
+			return $query->row();
+		else
+			return NULL;
+	}
+	
+	// Fetches the full name (firstname and lastname) of a user
+	function get_fullname_by_uid($uid)
+	{
+		$this->load->database();
+		$str = "SELECT firstname, lastname
 				FROM users
 				WHERE uid=?;";
 				
@@ -43,6 +68,25 @@ class Cirrusmodel extends CI_Model{
 		// if the user's registration is updated, affected_rows() == 2
 		return $this->db->affected_rows();
 	}
+	
+	// Updates the m_updatetime field with the current time
+	// i.e. updates the online status of a user
+	function update_registration($uid)
+	{		
+		$this->load->database();
+		$str = "UPDATE videochat_registrations 
+				SET m_updatetime = NOW()
+				WHERE uid = ?;";
+				
+		$data = array($uid);
+		
+		$query = $this->db->query($str, $data);
+		
+		// if the user's registration is updated, affected_rows() == 1,
+		// if the user is not found, affected_rows() == 0
+		return $this->db->affected_rows();		
+	}
+	
 	
 	// Unregisters a user from video chat
 	function unregister_user($uid)

@@ -90,7 +90,6 @@ $(document).ready(function() {
     	<div id="header">
         	<a href="<?=site_url("account/logout")?>" class="log_out" title="Logout">&nbsp;</a>
         	<a href="<?=site_url("/")?>" title="Zingberry!"><img src="images/mini_logo.png" alt="Zingberry!" /></a>
-            <input type="text" value="" title="Search similarities" />
             <ul>
             	<li><a href="<?=site_url("video")?>" class="video">&nbsp;</a></li>
                 <li><a href="<?=site_url("account")?>" class="user">&nbsp;</a></li>
@@ -141,7 +140,7 @@ $(document).ready(function() {
 							});
 						});
 					</script>
-                    <li><input type="submit" name="organizations_update" class="sub" value="Save Changes" /> </li>
+                    <li><input type="submit" name="organizations_update" class="btn" value="Save"/></li>
                 </ul>
             </form>
         </div>
@@ -174,25 +173,6 @@ $(document).ready(function() {
 			</div>
 		</div>
      </div>
-     
-      <div id="sliderWrap2">
-    <div id="openCloseIdentifier2"></div>
-		<div id="slider2">
-			<div id="sliderContent2">
-				<ul class="ac_set">
-                    <li><a href="javascript:void(0)">Personal Info</a></li>
-                    <li><a href="javascript:void(0)">Academics</a></li>
-                    <li><a href="javascript:void(0)">Organizations</a></li>
-                    <li><a href="javascript:void(0)">Interests</a></li>
-                </ul>
-			</div>
-            
-			<div id="openCloseWrap2">
-				<a href="javascript:void(0)" class="topMenuAction2" id="topMenuImage2">&nbsp;
-				</a>
-			</div>
-		</div>
-     </div>
-     
+          
 </body>
 </html>

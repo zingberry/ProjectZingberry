@@ -93,32 +93,26 @@
 		<div id="body">
 			<h2>About Us</h2>
 			<br />
-			<p>Zingberry allows you to stay connected with your Rutgers University campus. Read and post status updates that are shared exclusively with other Rutgers students. Meet and search for new people who share similar interests with you from your classes, dorms, organizations and more. Video Chat request users you think are cool. Or just instant message them. All with Zingberry.</p>
+			<p>Zingberry allows you to stay connected with your Rutgers University campus. Meet and search for new people who share similar interests with you from your classes, dorms, organizations and more. Video Chat request users you think are cool. Or just instant message them. All with Zingberry.</p>
 			<br />
 			<br />
 			<p>Have you ever wished that you had a friend in your Organic Chemistry class who could help you with a homework problem? Or that you had met someone on campus who loves the same weird movies that none of your friends know about? What makes Zingberry so useful is the fact that it allows you to search for people on campus based on classes, majors, clubs, interests and more. Find someone who you think is cool? You can send them a video chat request. If they choose to accept, you could be video conferencing with them in no time! Or if you don't want to use your camera, you can use the instant messaging service instead.</p>
 			<br />
 			<br />
-			<p>You are in total control with who you want to video chat with and what information you would like to share with other Rutgers students. Everyone on the website is required to register with their Rutgers email address, which creates accountability and safety. If there is any abuse or issues you would like us to address, please email us at abuse@zingberry.com.</p>
+			<p>You are in total control with who you want to video chat with and what information you would like to share with other Rutgers students. Everyone on the website is required to register with their Rutgers email address, which creates accountability and safety. If there is any abuse or issues you would like us to address, please email us at <a href="mailto:abuse@zingberry.com">abuse@zingberry.com</a></p>
 			<br />
 			<br />
 			<p>We are a startup company made up of amazing programmers, designers and entrepreneurs working together to create a phenomenal product. If you think you have what it takes to work with us, check our employment page and send us your info at <a href="mailto:employment@zingberry.com">employment@zingberry.com</a>   </p>
 			<br />
 			<br />
-            <p align="center"><h3>Team Zingberry</h3></p>
-			<div id="bio"> 
-				<div class="pic">  
-				</div> 
-				<div class="text"> 
-				</div> 
-			</div>	
+            <p align="center"><b>Team Zingberry</b></p>
             <div id="bio"> 
 				<div class="pic"> 
 					<img src="images/bios/Shawn.png" border="0" width="200" height="220" /> 
 				</div> 
 				<div class="text"> 
 					<p><strong>Shawn  Jaison, CEO and Co-Founder</strong></p> 
-					<p>Shawn is the CEO and product  visionary for Zingberry. He recruited some of the most talented and gifted  people to join and share his vision for a better way to stay connected with a college community. He founded  his first company called Tutoring Express in December 2009. Shawn loves <a href="http://www.python.org"target="_blank">python</a>, track and field and feedback and can always be contacted at <a href="mailto:shawnjaison@zingberry.com">shawnjaison@zingberry.com</a></p> 
+					<p>Shawn is the CEO and product  visionary for Zingberry. He recruited some of the most talented and gifted  people to join and share his vision for a better way to stay connected with a college community. He founded  his first company called Tutoring Express in December 2009. Shawn loves <a href="http://www.python.org"target="_blank">python</a>, front end web development, <a href="http://nj.milesplit.com/athletes/405387-shawn-jaison" target="_blank">track and field</a> and feedback and can always be contacted at <a href="mailto:shawnjaison@zingberry.com">shawnjaison@zingberry.com</a></p> 
 				</div> 
 			</div>	
 			<div id="bio"> 

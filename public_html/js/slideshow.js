@@ -3,7 +3,7 @@ slideControlPrefix     = "slide-control-";
 slideHighlightClass    = "highlight";
 slidesContainerID      = "slides";
 slidesControlsID       = "slides-controls";
-slideDelay             = 3000;
+slideDelay             = 4500;
 slideAnimationInterval = 20;
 slideTransitionSteps   = 10;
 

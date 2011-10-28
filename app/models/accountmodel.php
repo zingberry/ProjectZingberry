@@ -36,6 +36,30 @@ class Accountmodel extends CI_Model{
 	 * 	Returns:	returns an array of all the data on a user
 	 */
 	 
+	 
+	function get_user_pic($uid){
+		$data = array(
+			$uid
+		);
+		$query = $this->db->query("SELECT * FROM userimages WHERE uid=? LIMIT 1",$data);
+		$result = $query->row_array();
+		
+		return $result;
+	}
+	
+	function set_user_pic($image_path){
+		$query = $this->db->query("DELETE FROM userimages WHERE uid=?",array($this->session->userdata('uid')));
+		
+		$data= array(
+			$this->session->userdata('uid'),
+			$image_path
+		);
+		
+		$query = $this->db->query("INSERT INTO userimages (uid,filename,date_uploaded) VALUES (?,?,NOW())",$data);
+		
+		return $this->db->affected_rows();
+	}
+	 
 	function get_account($email, $password){
 		$this->load->database();
 		$data = array(
@@ -612,6 +636,24 @@ class Accountmodel extends CI_Model{
 		return $query->result_array();
 	}
 	
+	function get_relations_values($table,$reltable,$id,$name,$uid){
+		$data = array($uid);
+		$query = $this->db->query(
+			"SELECT $table.$name
+			 FROM $table, $reltable
+			 WHERE $table.$id=$reltable.$id
+				AND $reltable.uid=?",
+		$data);
+		$result = $query->result_array();
+		
+		$values = array();
+		
+		foreach($result as $i){
+			array_push($values, $i["$name"]);
+		}
+		
+		return $values;
+	}
 	function get_interests($uid){
 		$result = array(
 			"favorite_music_artists" => Accountmodel::get_relations("favorite_music_artists","has_favorite_music_artist","artist_id","artist_name",$uid),
@@ -626,6 +668,53 @@ class Accountmodel extends CI_Model{
 		
 		return $result;
 				
+	}
+	
+	
+	function get_profile_by_uid($uid){
+		$result = array(
+			"favorite_music_artists" => Accountmodel::get_relations_values("favorite_music_artists","has_favorite_music_artist","artist_id","artist_name",$uid),
+			"favorite_heroes" => Accountmodel::get_relations_values("favorite_heroes","has_favorite_hero","fhid","name",$uid),
+			"favorite_movies" => Accountmodel::get_relations_values("favorite_movies","has_favorite_movie","movie_id","movie_title",$uid),
+			"favorite_tvshows" => Accountmodel::get_relations_values("favorite_tvshows","has_favorite_tvshow","tvshow_id","tvshow_title",$uid),
+			"favorite_sports_teams" => Accountmodel::get_relations_values("favorite_sports_teams","has_favorite_sports_team","team_id","team_name",$uid),
+			"favorite_video_games" => Accountmodel::get_relations_values("favorite_video_games","has_favorite_video_game","video_game_id","video_game_title",$uid),
+			"favorite_books" => Accountmodel::get_relations_values("favorite_books","has_favorite_book","book_id","book_title",$uid),
+			"favorite_foods" => Accountmodel::get_relations_values("favorite_foods","has_favorite_food","ffid","name",$uid),
+			
+			"organizations" => Accountmodel::get_relations_values("organizations","is_member_of_organization","oid","name",$uid),
+			"workplaces" => Accountmodel::get_relations_values("workplaces","works_at","wid","name",$uid),
+			"greeks" => Accountmodel::get_relations_values("greeks","is_member_of_greek","greek_id","name",$uid),
+			
+			"courses" => Accountmodel::get_relations_values("courses","is_taking_course","courseid","course_name",$uid),
+			"majors" => Accountmodel::get_relations_values("majors","has_major","mid","major",$uid),
+			
+			"highschool" => Accountmodel::get_relations_values("highschool","has_highschool","hid","name",$uid),
+			"languages" => Accountmodel::get_relations_values("languages","speaks_language","langid","language",$uid),
+			"nationalities" => Accountmodel::get_relations_values("nationalities","has_nationality","nid","nationality",$uid),
+			
+			"user" => Accountmodel::get_account_by_uid($uid),
+			
+			"pic" => Accountmodel::get_user_pic($uid)
+		);
+		
+		
+		
+		return $result;
+	}
+	
+	function get_random_uids($limit){
+		$data = array(
+			$limit
+		);
+		$query = $this->db->query("SELECT uid FROM users WHERE uid >= (SELECT FLOOR( MAX(uid) * RAND()) FROM users ) ORDER BY uid LIMIT ?",$data);
+		
+		$result = array();
+		foreach($query->result_array() as $i){
+			array_push($result, $i['uid']);
+		}
+		
+		return $result;
 	}
 	
 }

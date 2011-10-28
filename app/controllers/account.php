@@ -118,10 +118,158 @@ class Account extends CI_Controller {
 		$this->load->view('zb-two-interests',$data);	
 	}
 	
+	private function crop_pic($x,$y,$w,$h,$source,$dest){
+		
+		
+	}
+	
+	private function resize_pic($w,$h,$source,$dest){
+		$this->load->library('image_lib');
+		
+		$resize['image_library'] = 'gd2';
+		$resize['source_image'] = $source;
+		$resize['new_image'] =  $dest;
+		$resize['width']  = $w;
+		$resize['height'] = $h;
+		
+		$this->image_lib->initialize($resize); 
+		$this->image_lib->resize();
+		
+		
+		echo $this->image_lib->display_errors();
+		
+	}
+	
+	private function crop_and_resize_pic($x,$y,$w,$h,$source,$dest){
+		$this->load->library('image_lib');
+				
+		$crop['image_library'] = 'gd2';
+		$crop['source_image']	= $source;
+		$crop['new_image']	= $dest;
+		//$image['create_thumb'] = TRUE;
+		$crop['maintain_ratio'] = FALSE;
+		$crop['x_axis'] = $x;
+		$crop['y_axis'] = $y;
+		$crop['width']	 = $w;
+		$crop['height'] = $h;
+		
+		$this->image_lib->initialize($crop); 
+		$this->image_lib->crop();
+		
+		echo $this->image_lib->display_errors();
+		
+		$this->image_lib->clear();
+		
+		$resize['image_library'] = 'gd2';
+		$resize['source_image'] = $dest;
+		$resize['new_image'] =  $dest;
+		$resize['width']  = '133';
+		$resize['height'] = '133';
+		
+		$this->image_lib->initialize($resize); 
+		$this->image_lib->resize();
+		
+		echo $this->image_lib->display_errors();
+		
+	}
+	
 	function picture(){
 		Account::is_logged_in();
 		
-		$this->load->view('zb-two-picture');	
+		$this->load->model('accountmodel');
+		
+		$upload_folder = './user_images/';
+		
+		$data = array(
+			"thumb_width" => 133,
+			"thumb_height" => 133,
+			"upload_folder" => $upload_folder,
+			"thumb" => false
+		);
+		
+		
+		if($this->input->post('upload')){
+			
+			$userimage = $this->accountmodel->get_user_pic($this->session->userdata('uid'));
+			if($userimage!=NULL){
+				if(file_exists($upload_folder.$userimage['filename']))
+					unlink($upload_folder.$userimage['filename']);
+				if(file_exists($upload_folder."thumb_".$userimage['filename']))
+				unlink($upload_folder."thumb_".$userimage['filename']);
+			}
+			
+			$config['upload_path'] = $upload_folder;
+			$config['allowed_types'] = 'gif|jpg|png';
+			$config['file_name'] = $this->session->userdata('uid').'_'.time();
+			/*$config['max_size']	= '100';
+			$config['max_width']  = '1024';
+			$config['max_height']  = '768';*/
+	
+			$this->load->library('upload', $config);
+			
+	
+			if ( ! $this->upload->do_upload()){
+				$data['upload_error'] = $this->upload->display_errors();
+				$this->load->view('zb-two-picture', $data);
+			}else{
+				$data['upload_data'] = $this->upload->data();
+				
+				Account::resize_pic('450','450',
+					$upload_folder.$data['upload_data']['file_name'],
+					$upload_folder.$data['upload_data']['file_name']
+				);
+				$this->accountmodel->set_user_pic($data['upload_data']['file_name']);
+			}
+			
+		}else if($this->input->post('upload_thumbnail')){
+			
+			$userimage = $this->accountmodel->get_user_pic($this->session->userdata('uid'));
+			if($userimage!=NULL){
+				Account::crop_and_resize_pic(
+					$this->input->post('x'),
+					$this->input->post('y'),
+					$this->input->post('w'),
+					$this->input->post('h'),
+					$upload_folder.$userimage['filename'],
+					$upload_folder."thumb_".$userimage['filename']
+				);
+				
+			}
+
+		}
+			
+		$userimage = $this->accountmodel->get_user_pic($this->session->userdata('uid'));
+		if($userimage!=NULL){
+			$size = getimagesize($upload_folder.$userimage['filename']);
+			
+			if(file_exists($upload_folder."thumb_".$userimage['filename']))
+				$data['thumb'] = true;
+			$data['thumb_image'] = "thumb_".$userimage['filename'];
+			$data['large_image'] = $userimage['filename'];
+			$data['large_width'] = $size[0];
+			$data['large_height'] = $size[1];
+			$this->load->view('zb-two-picture',$data);	
+		}else{
+			$this->load->view('zb-two-picture');
+		}
+		
+		
+		/*
+		
+		
+		$image['image_library'] = 'gd2';
+		$image['source_image']	= '/path/to/image/mypic.jpg';
+		$image['create_thumb'] = TRUE;
+		$image['maintain_ratio'] = TRUE;
+		$image['x_axis'] = '100';
+		$image['y_axis'] = '40';
+		$image['width']	 = 133;
+		$image['height'] = 133;
+		
+		$this->load->library('image_lib', $image); 
+		
+		$this->image_lib->crop();*/
+		
 	}
 	
 	
@@ -305,8 +453,8 @@ class Account extends CI_Controller {
 				
 	}
 	
-	function forgotpassword($code){
-		if(isset($code) && !($this->input->post("email"))){
+	function forgotpassword($code = NULL){
+		if(($code != NULL) && !($this->input->post("email"))){
 			
 			$this->load->view("zb-two-forgot-password-change");
 		} else if($this->input->post("email")){

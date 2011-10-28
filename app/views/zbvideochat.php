@@ -25,7 +25,7 @@
 			// plain balloon tooltip
 			var tooltip = new Balloon;
 			BalloonConfig(tooltip,'GPlain');
-			tooltip.fontSize  = '11pt';
+			
 			// fading balloon
 			var fader = new Balloon;
 			BalloonConfig(fader,'GFade');   
@@ -44,6 +44,8 @@
 			fadeBox.allowFade   = true;
 			fadeBox.fadeIn      = 750;
 			fadeBox.fadeOut     = 200;
+			
+			balloon.delayTime = 250;
 		</script>
 
 		<script type="text/javascript">	
@@ -115,14 +117,15 @@
 			var xiSwfUrlStr = "cirrusapp/playerProductInstall.swf";
 			var flashvars = {};
 			flashvars.uid = "<?=$uid?>"; // "commnad-line-style" argument to automatically connect with this user id
-			flashvars.name = "<?=$firstname?>"; // "commnad-line-style" argument to automatically set the user's name
+			flashvars.name = "<?php
+								echo $firstname . ' ' . $lastname; ?>"; // "commnad-line-style" argument to automatically set the user's name
 			// check if the target user is defined and set accordingly
 			flashvars.tuid = "<?php 
-				if (isset($tuid) && isset($tname))				
+				if (isset($tuid) && isset($t_firstname) && isset($t_lastname))				
 					echo $tuid;?>";
 			flashvars.tname = "<?php 
-				if (isset($tuid) && isset($tname))				
-					echo $tname;?>";
+				if (isset($tuid) && isset($t_firstname) && isset($t_lastname))				
+					echo $t_firstname . ' ' . $t_lastname;?>";
 			var params = {};
 			params.wmode ="transparent";
 			params.quality = "high";			
@@ -146,24 +149,195 @@
 					{username : '<?=$uid?>', identity : '0'});
 			}
 
+			// variable for setting request refresh rate
+			var requestsTimeout = 30*1000;
+			var fetchRequestsTimer = null;
+			var updateStatusDelay = 30*1000;
+			var updateStatusTimer = null;
 			$(document).ready(function(){
+				// set function to unregister on exit
 				$(window).bind("beforeunload", function(e) {
 					doUnregistration();
 				});
+				
+				// fetch initial set of requests - self-calling timer
+				fetchChatRequests();			
+				// set up timer for automatically refreshing online status
+				updateStatusTimer = setTimeout("refreshOnlineStatus()", updateStatusDelay);				
 			});
 
+			
+			// update online status using AJAX		
+			var refreshRequestObj = null;
+			function refreshOnlineStatus()
+			{							
+				$.ajax({
+					type: "POST",
+					url: "<?=site_url('video/updateOnlineStatus')?>", 
+					success: function(msg){
+						// parse JSON string
+						refreshRequestObj = eval(msg);
+						if (refreshRequestObj == null)
+						{							
+							alert("Lost communication with the server. Check your internet connection and reload the page.");
+						}											
+					}
+				});
+				
+				// set timer for next refresh of online status
+				updateStatusTimer = setTimeout("refreshOnlineStatus()", updateStatusDelay);
+			}
+			
+			
 			function getMyApp(movieName) 
 			{
 				var isIE = navigator.appName.indexOf("Microsoft") != -1;
 				return (isIE) ? window[movieName] : document[movieName];
 			}
 
-			function makeJSCall()
+			function makeTestJSCallToNick()
 			{
-				// call flash method on click			
-				getMyApp("VideoChatSample").callUser_JS("32", "Nicholas");
+				// call flash method to make test call	
+				getMyApp("VideoChatSample").callUser_JS("32", "Nicholas Michael");
 			}
-
+					
+			function makeJSVideoCall(target_uid, target_name)
+			{
+				// call flash method to start video call to given user
+				getMyApp("VideoChatSample").callUser_JS(target_uid, target_name);
+			}				
+			
+			// global variable for counting number of pending chat requests
+			var numOfRequests = 0;
+			
+			// send AJAX request to remove request
+			// on success the request with id listElementId is removed from the list
+			function deleteChatRequest(ruid, listElementId)
+			{
+				// confirm that user wants to delete request
+				var r=confirm("Are you sure you want to remove this chat request?");
+				if (r==true)
+				{					
+					// first send AJAX request to delete request
+					$.ajax({
+						type: "POST",
+						url: "<?=site_url('videorequest/delsingle')?>/" + ruid, 
+						success: function(msg){
+							// check response
+							var tmpResponseObj = eval(msg);
+							if (tmpResponseObj != null)
+							{
+								if (tmpResponseObj.numdeleted > 0)
+								{
+									// get handle to list
+									var chatList = document.getElementById("chat_request_list");
+									// get handle to child list element
+									var listItem = document.getElementById(listElementId);
+									// remove child element
+									chatList.removeChild(listItem);
+									numOfRequests--;
+									if (numOfRequests < 1)
+									{					
+										chatList.innerHTML = "<li>You have no pending requests at this time.</li>";
+									}
+								}
+								else
+								{
+									alert("Could not remove given request at this time.");
+								}
+							}
+							else
+							{
+								alert("Could not remove given request at this time.");
+							}
+						}
+					});
+				}
+			}
+			
+			// send AJAX request to remove all pending request
+			// on success all requests are removed from the list
+			function deleteAllChatRequests()
+			{
+				// confirm that user wants to delete request
+				var r=confirm("Are you sure you want to remove ALL pending chat request?");
+				if (r==true)
+				{					
+					// first send AJAX request to delete request
+					$.ajax({
+						type: "POST",
+						url: "<?=site_url('videorequest/delall')?>", 
+						success: function(msg){
+							// check response
+							var tmpResponseObj = eval(msg);
+							if (tmpResponseObj != null)
+							{
+								if (tmpResponseObj.numdeleted > 0)
+								{
+									// get handle to list
+									var chatList = document.getElementById("chat_request_list");
+									// remove child element
+									numOfRequests--;
+									chatList.innerHTML = "<li>You have no pending requests at this time.</li>";									
+								}
+								else
+								{
+									alert("Could not delete all pending requests at this time.");
+								}
+							}
+							else
+							{
+								alert("Could not delete all pending requests at this time.");
+							}
+						}
+					});
+				}
+			}
+			
+			
+			// check for new requests using AJAX		
+			var requestObj = null;
+			var htmlStr = "";			
+			function fetchChatRequests()
+			{							
+				$.ajax({
+					type: "POST",
+					url: "<?=site_url('videorequest/lookupbytarget/1/1')?>", // change to fetch online only
+					success: function(msg){
+						// parse JSON string
+						requestObj = eval(msg);
+						numOfRequests = 0;
+						htmlStr = ""; // reset html string
+						if (requestObj != null)
+						{							
+							// now populate the chat request panel							
+							for (var i in requestObj)
+							{
+								htmlStr += "<li id=\"request_" + requestObj[i].requestor_uid + "\"><a href='javascript:void(0)'><span onmouseover=\"balloon.showTooltip(event,'" 
+									+ requestObj[i].request_message + "',0)\">"
+									+ requestObj[i].firstname + " " + requestObj[i].lastname 
+									+ " " + requestObj[i].date_requested + "</span></a>"
+									+ "<a href='javascript:deleteChatRequest(\"" + requestObj[i].requestor_uid + "\", \"request_" + requestObj[i].requestor_uid + "\");'><img src='<?=site_url('images')?>/delete_request.png' alt='Remove request'/></a>&nbsp;"
+									+ "<a href='javascript:makeJSVideoCall(\"" + requestObj[i].requestor_uid + "\", \"" + requestObj[i].firstname + " " + requestObj[i].lastname + "\");'><img src='<?=site_url('images')?>/accept_request.png' alt='Accept request'/></a>";
+								htmlStr += "</li>";	
+								numOfRequests++;
+							}
+							htmlStr += "<br><li><a href='javascript:deleteAllChatRequests();'>Delete ALL!</a></li>";
+						}
+						else
+						{							
+							htmlStr = "<li>You have no pending requests at this time.</li>";
+						}
+						
+						// change inner html to show the requests
+						$("#chat_request_list").html(htmlStr);						
+					}
+				});
+				
+				// set timer for next refresh of chat requests
+				fetchRequestsTimer = setTimeout("fetchChatRequests()", requestsTimeout);
+			}
+			
 			//-->
 		</script>
 
@@ -176,7 +350,7 @@
 				<a href="<?=site_url("account/logout")?>" class="log_out" title="Logout">&nbsp;</a>
 				<a href="<?=site_url("browse")?>" title="Zingberry!"><img src="images/mini_logo.png" alt="Zingberry!" /></a>
 				<ul>
-					<li><a class="video" alt="Call Nicholas (32)" onclick="makeJSCall();" 
+					<li><a class="video" alt="Call Nicholas (32)" onclick="makeTestJSCallToNick();" 
 							onmouseover="balloon.showTooltip(event,'Click to make a test call to Nicholas',0,250)">&nbsp;</a></li>
 					<li><a href="<?=site_url("account")?>" class="user">&nbsp;</a></li>
 				</ul>
@@ -277,20 +451,8 @@
 			
 			<div id="slider4">			
 				<div id="sliderContent4">
-					<ul class="ac_set">
-						<li><a href="javascript:void(0)" onmouseover="balloon.showTooltip(event,'Click to make a test call to Nicholas',0,250)">Personal Info</a>
-							<ul>
-								<li><a href="javascript:void(0)">Academics</a></li>
-								<li><a href="javascript:void(0)">Organizations</a></li>
-								<li><a href="javascript:void(0)">Interests</a></li>
-								<li><a href="javascript:void(0)">Academics</a></li>
-								<li><a href="javascript:void(0)">Organizations</a></li>
-								<li><a href="javascript:void(0)">Interests</a></li>
-							</ul>
-						</li>
-						<li><a href="javascript:void(0)">Academics</a></li>
-						<li><a href="javascript:void(0)">Organizations</a></li>
-						<li><a href="javascript:void(0)">Interests</a></li>
+					<ul class="ac_set2" id="chat_request_list">
+						<li>Searching for any pending video requests...</li>					
 					</ul>
 				</div>
 

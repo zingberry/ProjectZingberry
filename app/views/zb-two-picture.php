@@ -7,9 +7,10 @@
 <base href="<?php echo $this->config->item('base_url') ?>" />
 <link href="css/reset.css" type="text/css" media="all" rel="stylesheet" />
 <link href="css/style.css" type="text/css" media="all" rel="stylesheet" />
-
+<link href="css/imgareaselect-animated.css" type="text/css" media="all" rel="stylesheet" />
 <script type="text/javascript" src="js/jquery_003.js"></script>
 <script type="text/javascript" src="js/blur.js"></script>
+<script type="text/javascript" src="js/jquery.imgareaselect.pack.js"></script>
 <script src="js/jquery.MultiFile.js" type="text/javascript" language="javascript"></script>
 <script type="text/javascript">
 $(function(){ 
@@ -17,6 +18,27 @@ $(function(){
 				$('input[title!=""]').hint();
 			});
 $(document).ready(function() {
+	
+    <?php if(isset($large_image)){?>
+	$('#save_thumb').click(function() {
+		var x = $('#x').val();
+		var y = $('#y').val();
+		var w = $('#w').val();
+		var h = $('#h').val();
+		if(x=="" || y=="" || w=="" || h==""){
+			alert("You must make a selection first");
+			return false;
+		}else{
+			return true;
+		}
+	});
+	
+	$("#croptoggle").click(function(){
+		$("#croppable").toggle();
+	});
+	<?php } ?>
+	
+	
 		$(".topMenuAction").click( function() {
 			if ($("#openCloseIdentifier").is(":hidden")) {
 				$("#slider").animate({ 
@@ -77,8 +99,36 @@ $(document).ready(function() {
 				$("#openCloseIdentifier1").hide();
 			}
 		  
-	});			
+	});		
+	
+<?php if(isset($large_image)){?>
+	function preview(img, selection) { 
+		var scaleX = <?php echo $thumb_width;?> / selection.width; 
+		var scaleY = <?php echo $thumb_height;?> / selection.height; 
+		
+		$('#thumbnail + div > img').css({ 
+			width: Math.round(scaleX * <?php echo $large_width;?>) + 'px', 
+			height: Math.round(scaleY * <?php echo $large_height;?>) + 'px',
+			marginLeft: '-' + Math.round(scaleX * selection.x1) + 'px', 
+			marginTop: '-' + Math.round(scaleY * selection.y1) + 'px' 
+		});
+		$('#x').val(selection.x1);
+		$('#y').val(selection.y1);
+		$('#w').val(selection.width);
+		$('#h').val(selection.height);
+	} 
+	
+	$(window).load(function () { 
+		$('#thumbnail').imgAreaSelect({ aspectRatio: '1:1', onSelectChange: preview }); 
+	});
+
+
+<?php }?>
+	
+		
 </script>
+
+
 
 <title>Zingberry! Account- Picture</title>
 </head>
@@ -88,7 +138,6 @@ $(document).ready(function() {
     	<div id="header">
         	<a href="<?=site_url("account/logout")?>" class="log_out" title="Logout">&nbsp;</a>
         	<a href="<?=site_url("/")?>" title="Zingberry!"><img src="images/mini_logo.png" alt="Zingberry!" /></a>
-            <input type="text" value="" title="Search similarities" />
             <ul>
             	<li><a href="<?=site_url("video")?>" class="video">&nbsp;</a></li>
                 <li><a href="<?=site_url("account")?>" class="user">&nbsp;</a></li>
@@ -97,12 +146,34 @@ $(document).ready(function() {
     	
         <div id="body">
         	<h2>Display Picture</h2>
-        	<form name="frm_login" action="#" method="post">
+            <?php if(file_exists($upload_folder.$thumb_image)){ ?>
+                Current Pic (Crop by dragging your mouse):<br />
+                <img src="<?=$upload_folder.$thumb_image?>" />
+            <?php } ?>
+            <br />
+        	<?php if(isset($large_image)){?>
+                <?php if(file_exists($upload_folder.$thumb_image)){?><button id="croptoggle"> Crop Pic </button><?php } ?>
+                <div id="croppable" <?php if(file_exists($upload_folder.$thumb_image)){?>style="display:none;"<?php } ?>>
+                    <form name="thumbnail" action="<?=site_url('account/picture')?>" method="post">
+                        <img src="<?=$upload_folder.$large_image?>" style="float: left; margin-right: 10px;" id="thumbnail" alt="Create Thumbnail" />
+                        <div style="border:1px #e5e5e5 solid; float:left; position:relative; overflow:hidden; width:<?=$thumb_width?>px; height:<?=$thumb_height?>px;">
+                            <img src="<?=$upload_folder.$large_image?>" style="position: relative;" alt="Thumbnail Preview" />
+                        </div>
+                        <input type="hidden" name="x" value="" id="x" />
+                        <input type="hidden" name="y" value="" id="y" />
+                        <input type="hidden" name="w" value="" id="w" />
+                        <input type="hidden" name="h" value="" id="h" />
+                        <input type="submit" name="upload_thumbnail" value="Save Thumbnail" id="save_thumb" />
+                    </form>
+                </div>
+				<br />
+         	<?php } ?>
+        	<form name="frm_login" action="<?=site_url('account/picture')?>" method="post" enctype="multipart/form-data">
                 <ul class="form_account">
-                    <li>Select Picture</li>
-                    <li><input type="file" class="multi" accept="gif|jpg" maxlength="1"/></li>
-                     <li><input type="submit" value="Upload" class="btn"/></li>
-                     
+                    <li>Upload a New Picture</li>
+                    <?php if(isset($upload_error)){echo '<li style="color:red;">'.$upload_error."</li>";}?>
+                    <li><input type="file" name="userfile" class="multi" accept="gif|jpg|png" maxlength="1"/></li>
+                    <li><input type="submit" name="upload" value="Upload" class="btn"/></li>
                 </ul>
             </form>
         </div>
@@ -136,24 +207,7 @@ $(document).ready(function() {
 		</div>
      </div>
      
-      <div id="sliderWrap2">
-    <div id="openCloseIdentifier2"></div>
-		<div id="slider2">
-			<div id="sliderContent2">
-				<ul class="ac_set">
-                    <li><a href="javascript:void(0)">Personal Info</a></li>
-                    <li><a href="javascript:void(0)">Academics</a></li>
-                    <li><a href="javascript:void(0)">Organizations</a></li>
-                    <li><a href="javascript:void(0)">Interests</a></li>
-                </ul>
-			</div>
-            
-			<div id="openCloseWrap2">
-				<a href="javascript:void(0)" class="topMenuAction2" id="topMenuImage2">&nbsp;
-				</a>
-			</div>
-		</div>
-     </div>
      
+	
 </body>
 </html>

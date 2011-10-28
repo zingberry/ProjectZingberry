@@ -40,10 +40,10 @@ $(document).ready(function() {
 <body>
 	<div id="content">
     	<a href="index.html" class="logo" title="Zingberry!"><img src="images/logo_forgot_password.jpg" alt="Zingberry!" /></a>
-        <form name="frm_login" action="#" method="post">
+        <form name="frm_login" action="<?=current_url()?>" method="post">
         	<ul class="form">
             	<li>Forgot Password?</li>
-                <li><input type="text" name="txt_email" title="Rutgers Email" /></li>
+                <li><input type="text" name="email" title="Rutgers Email" /></li>
                 <li><input type="submit" class="sub" value="Send" /></li>
             </ul>
         </form>

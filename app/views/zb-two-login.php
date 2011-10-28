@@ -1,10 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="description" content="" />
 <meta name="keywords" content="" />
 <base href="<?php echo $this->config->item('base_url') ?>" />
+<meta name="google-site-verification" content="ZJql03mqoUu2VTffn43sgF0zPpE7N7Gb6cYtuVl521Q" />
 <link href="css/reset.css" type="text/css" rel="stylesheet" />
 <link href="css/style.css" type="text/css" rel="stylesheet" />
 <link href="css/jquery.qtip.css" rel="stylesheet" type="text/css" />
@@ -14,7 +14,6 @@
 <script type="text/javascript" src="js/blur.js"></script>
 <script type="text/javascript" src="js/slideshow.js"></script>
 <script src="js/jquery.qtip.pack.js" type="text/javascript"></script>
-
 
 <script type="text/javascript">
 $(function(){ 
@@ -54,7 +53,20 @@ $(document).ready(function() {
 				
 				$("#openCloseIdentifier").hide();
 			}
-		});  
+		});
+			if ($("#openCloseIdentifier").is(":hidden")) {
+				$("#slider").animate({ 
+					marginLeft: "-320px"
+					}, 500 );
+				
+				$("#openCloseIdentifier").show();
+			} else {
+				$("#slider").animate({ 
+					marginLeft: "0px"
+					}, 500 );
+				
+				$("#openCloseIdentifier").hide();
+			}  
 	});			
 </script>
 
@@ -65,7 +77,7 @@ $(document).ready(function() {
 	<div id="content">
 	  <form name="frm_login" action="#" method="post">
    	  <ul class="form">
-      	<div id="slideshow"><div id="slides"><div class="slide"><img src="images/logo_login.jpg" width="826" height="305"/>Slide content 1</div><div class="slide"><img src="images/logo_forgot_password.jpg" width="826" height="305"/>Slide content 2</div><div class="slide"><img src="images/logo_login.jpg" width="826" height="305"/>Slide content 3</div></div><div id="slides-controls"><a href="#">1</a> <a href="#">2</a> <a href="#">3</a></div></div>
+      	<div id="slideshow"><div id="slides"><div class="slide"><img src="images/slideshowtext.png" width="826" height="305"/>Slide content 1</div><div class="slide"><img src="images/slideshowtile.png" width="826" height="305"/>Slide content 2</div><div class="slide"><img src="images/slideshowvideo.png" width="826" height="305"/>Slide content 3</div></div><div id="slides-controls"><a href="#">1</a> <a href="#">2</a> <a href="#">3</a></div></div>
       			           
            	    <input type="text" name="name" title="Name"/></li>
                 <li><input type="text" name="email" title="Rutgers Email" /></li>
