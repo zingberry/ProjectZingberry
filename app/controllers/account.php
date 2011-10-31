@@ -616,10 +616,13 @@ class Account extends CI_Controller {
         //$error["email"] = "";
         $eden = "/^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@eden.rutgers.edu$/";
 		$scarlet = "/^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@scarletmail.rutgers.edu$/";
-		$standard = "/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/";
+		$general = "/^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@rutgers.edu$/";
+		$all = "/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/";
 		
-		if(!preg_match($eden , $this->input->post('email')) && !preg_match($scarlet , $this->input->post('email'))) {
-        //if(!preg_match($standard , $this->input->post('email'))) {
+		$email = $this->input->post('email');
+		
+		if(!preg_match($eden , $email) && !preg_match($scarlet , $email) && !preg_match($general, $email)) {
+        //if(!preg_match($all , $this->input->post('email'))) {
             $error["email"] = 'You must enter a valid Rutgers student email! (*@eden.rutgers.edu or *@scarletmail.rutgers.edu)';
             //$error["count"] += 1;
         }
