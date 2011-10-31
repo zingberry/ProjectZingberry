@@ -164,7 +164,7 @@ $(document).ready(function() {
 							});
 						});
 					</script>
-                    <li>Favorite Video Games</li>
+                    <li>Favorite Games</li>
                     <li><input id="favorite_video_games" type="text" name="favorite_video_games"/></li>
                     <script type="text/javascript">
 						$(document).ready(function() {

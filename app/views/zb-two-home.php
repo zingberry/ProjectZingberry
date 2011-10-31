@@ -213,7 +213,7 @@ $(document).ready(function() {
                 	<option <? if($this->input->post('category')=='favorite_movies'){ echo 'selected="selected"';}?> value="favorite_movies">Favorite Movie</option>
                 	<option <? if($this->input->post('category')=='favorite_tvshows'){ echo 'selected="selected"';}?> value="favorite_tvshows">Favorite Tv Show</option>
                 	<option <? if($this->input->post('category')=='favorite_sports_teams'){ echo 'selected="selected"';}?> value="favorite_sports_teams">Favorite Sports Team</option>
-                	<option <? if($this->input->post('category')=='favorite_video_games'){ echo 'selected="selected"';}?> value="favorite_video_games">Favorite Video Game</option>
+                	<option <? if($this->input->post('category')=='favorite_video_games'){ echo 'selected="selected"';}?> value="favorite_video_games">Favorite Game</option>
                 	<option <? if($this->input->post('category')=='favorite_books'){ echo 'selected="selected"';}?> value="favorite_books">Favorite Book</option>
                 	<option <? if($this->input->post('category')=='favorite_foods'){ echo 'selected="selected"';}?> value="favorite_foods">Favorite Food</option>
                 	<option <? if($this->input->post('category')=='organizations'){ echo 'selected="selected"';}?> value="organizations">Organization</option>
@@ -308,7 +308,7 @@ $(document).ready(function() {
                             <li class="data"><?=implode(", ",$u['favorite_tvshows'])?></li>
                             <li class="title">Favorite Sports Teams</li>
                             <li class="data"><?=implode(", ",$u['favorite_sports_teams'])?></li>
-                            <li class="title">Favorite Video Games</li>
+                            <li class="title">Favorite Games</li>
                             <li class="data"><?=implode(", ",$u['favorite_video_games'])?></li>
                             <li class="title">Favorite Books</li>
                             <li class="data"><?=implode(", ",$u['favorite_books'])?></li>
