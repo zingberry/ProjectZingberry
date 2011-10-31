@@ -9,7 +9,7 @@
 	</tr>
 	<tr>
 		<td style="font-family:Arial, Helvetica, sans-serif; padding-left:30px" background="<?=$this->config->item('base_url')?>images/email/content.png" width="700" height="183">
-            Dear<?=$this->input->post("firstname")?> <?=$this->input->post("lastname")?>,<br><br>
+            Dear <?=$this->input->post("name")?>,<br><br>
 
 			Thank you for registering at www.zingberry.com. <br>
 			You may now log in using the following email and password after confirmation:<br>

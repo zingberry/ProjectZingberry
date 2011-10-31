@@ -93,11 +93,11 @@ $(document).ready(function() {
            <div id="body">
         	<h2>Support</h2>
             <br />
-            <p>Zingberry allows you to stay connected with your Rutgers University campus. Meet and search for new people who share similar interests with you from your classes, dorms, organizations and more. Video Chat request users you think are cool. Or just instant message them. All with Zingberry. <p>
+            <p>Zingberry allows you to stay connected with your Rutgers University campus. Meet and search for new people who share similar interests with you from your classes, dorms, organizations and more. Video Chat request users you think are cool. Or just instant message them. All with Zingberry.
 <br />
 <br />
 <b>1.	How do I start using Zingberry? </b><br />
-<b>A.</b> Please register using your Rutgers Eden or Scarlet Mail email address. At this time, Zingberry is only open to Rutgers University New Brunswick  students. Provide your full name, make up a password, and click register. You should soon receive a verification email. As soon as your email address is verified, you are ready to use the site. 
+<b>A.</b> Please register using your Rutgers Eden or Scarlet Mail email address. At this time, Zingberry is only open to Rutgers University New Brunswick  students. Provide your full name, make up a password, and click register. You should soon receive a verification email. As soon as your email address is verified, you are ready to use the site. <a href="<?=site_url('zing/tutorial')?>" target="_blank">Check out our slideshow tutorial!</a>
 <br />
 <br />
 <b>2.	How do I Login?<br />
@@ -123,6 +123,7 @@ A.</b>	 Simply move your mouse to hover over a user's image. Four categories lis
 <br />
 <b>7.	How do I search for users with an interest or similarity?<br />
 A.</b>	If you decide you want to discover people with a similarity (ex: visual arts majors), you can  search by typing it in the search bar located in the header, selecting the category to search in the drop down menu(ex: major), and hitting the enter key. People who fit the search results will be displayed as a tile.
+<br />
 <br />
 <b>8.	How do I video chat request a user?<br />
 A.</b>	If you decide to request a video chat with a user, click send chat request in the drop down menu. You will be prompted to send an optional message. The user will receive a notification in their chat requests tab that you have requested a video chat.  

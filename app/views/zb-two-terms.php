@@ -93,11 +93,11 @@ $(document).ready(function() {
            <div id="body">
         	<h2>Terms & Conditions</h2>
             <br />
-            <p>Zingberry allows you to stay connected with your Rutgers University campus. Read and post status updates that are shared exclusively with other Rutgers students. Meet and search for new people who share similar interests with you from your classes, dorms, organizations and more. Video Chat request users you think are cool. Or just instant message them. All with Zingberry.</p>
+            <p><b>Zingberry LLC</b> allows you to stay connected with your Rutgers University campus. Meet and search for new people who share similar interests with you from your classes, dorms, organizations and more. Video Chat request users you think are cool. Or just instant message them. All with Zingberry.</p>
 <br />
 <br />
 <p><b>1. ACCEPTANCE OF TERMS </b><br />
-Zingberry provides a platform for Rutgers New Brunswick undergraduate students to upload their information in order to search & interact with one another (referred to hereafter as "the Service") subject to the following Terms of Use ("TOU"). By using the Service in any way, you are agreeing to comply with the TOU. In addition, when using particular Zingberry services, you agree to abide by any applicable posted guidelines for all Zingberry services, which may change from time to time. Should you object to any term or condition of the TOU, any guidelines, or any subsequent modifications thereto or become dissatisfied with Zingberry in any way, your only recourse is to immediately discontinue use of Zingberry. Zingberry has the right, but is not obligated, to strictly enforce the TOU through self-help, community moderation, active investigation, litigation and prosecution. 
+Zingberry LLC provides a platform for Rutgers New Brunswick undergraduate students to upload their information in order to search & interact with one another (referred to hereafter as "the Service") subject to the following Terms of Use ("TOU"). By using the Service in any way, you are agreeing to comply with the TOU. In addition, when using particular Zingberry services, you agree to abide by any applicable posted guidelines for all Zingberry services, which may change from time to time. Should you object to any term or condition of the TOU, any guidelines, or any subsequent modifications thereto or become dissatisfied with Zingberry in any way, your only recourse is to immediately discontinue use of Zingberry. Zingberry has the right, but is not obligated, to strictly enforce the TOU through self-help, community moderation, active investigation, litigation and prosecution. 
 <br />
 <br />
 <b>2. MODIFICATIONS TO THIS AGREEMENT </b><br />

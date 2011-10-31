@@ -190,13 +190,7 @@ class Account extends CI_Controller {
 		
 		if($this->input->post('upload')){
 			
-			$userimage = $this->accountmodel->get_user_pic($this->session->userdata('uid'));
-			if($userimage!=NULL){
-				if(file_exists($upload_folder.$userimage['filename']))
-					unlink($upload_folder.$userimage['filename']);
-				if(file_exists($upload_folder."thumb_".$userimage['filename']))
-				unlink($upload_folder."thumb_".$userimage['filename']);
-			}
+			
 			
 			$config['upload_path'] = $upload_folder;
 			$config['allowed_types'] = 'gif|jpg|png';
@@ -211,6 +205,7 @@ class Account extends CI_Controller {
 			if ( ! $this->upload->do_upload()){
 				$data['upload_error'] = $this->upload->display_errors();
 				$this->load->view('zb-two-picture', $data);
+				return;
 			}else{
 				$data['upload_data'] = $this->upload->data();
 				
@@ -218,6 +213,15 @@ class Account extends CI_Controller {
 					$upload_folder.$data['upload_data']['file_name'],
 					$upload_folder.$data['upload_data']['file_name']
 				);
+				
+				$userimage = $this->accountmodel->get_user_pic($this->session->userdata('uid'));
+				if($userimage!=NULL){
+					if(file_exists($upload_folder.$userimage['filename']))
+						unlink($upload_folder.$userimage['filename']);
+					if(file_exists($upload_folder."thumb_".$userimage['filename']))
+					unlink($upload_folder."thumb_".$userimage['filename']);
+				}
+				
 				$this->accountmodel->set_user_pic($data['upload_data']['file_name']);
 			}
 			
@@ -415,22 +419,24 @@ class Account extends CI_Controller {
 				$userdata = array(
 					'uid'=>$user['uid'],
 					'firstname'=>$user['firstname'],
-					'lastname'=>$user['lastname'],
-					'firstname'=>$user['firstname'],
+					'lastname'=>$user['lastname']
 				);
 				$this->session->set_userdata($userdata);
-				redirect('browse','location');
+				if($user['logincount']==0)
+					redirect('zing/tutorial','location');
+				else
+					redirect('browse/initial','location');
+			}else if ($this->input->post('email') == ""){
+				$data = Account::account_forms();
+				$data['login_errors'] = 'Please enter your email and password.';
+				$this->load->view('zb-two-login',$data);
 			}else if ($user = $this->accountmodel->is_unregistered()){
 				$data = Account::account_forms();
-				$data['header']['title'] = 'Home';
-				$data['page'] = 'home';
 				$data['login_errors'] = 'You still havent verified your email address. Please check your email and click the verification link.';
 				$this->load->view('zb-two-login',$data);
 			}else{
 				$this->accountmodel->bad_login();
 				$data = Account::account_forms();
-				$data['header']['title'] = 'Home';
-				$data['page'] = 'home';
 				$data['login_errors'] = 'The email/password you entered is incorrect. Please try again';
 				$this->load->view('zb-two-login',$data);
 			}
@@ -454,11 +460,38 @@ class Account extends CI_Controller {
 	}
 	
 	function forgotpassword($code = NULL){
-		if(($code != NULL) && !($this->input->post("email"))){
+		$this->load->model('accountmodel');
+		if(($code != NULL) && ($this->input->post("email"))){
+			$errors = array();
+			if($this->input->post("password") != $this->input->post("password")){
+				array_push($errors,"Passwords do not match");
+			} else {
+				$success = $this->accountmodel->reset_password($this->input->post("email"), $this->input->post("password"), $code);
+				
+				if(!$success){
+					array_push($errors,"Your code doesnt match your email address. Please try submitting the forgot password request again.");
+					$this->load->view("zb-two-forgot-password-change",array("errors"=>$errors));
+					return;
+				} else {
+					$this->load->view("zb-two-forgot-password-success");
+					return;
+				}
+				
+				
+			}
+			$this->load->view("zb-two-forgot-password-change",array("errors"=>$errors));
 			
+
+		} else if(($code != NULL) && !($this->input->post("email"))) {
 			$this->load->view("zb-two-forgot-password-change");
 		} else if($this->input->post("email")){
-			$this->load->view("zb-two-forgot-password-success");
+			$result = $this->accountmodel->set_forgot_password($this->input->post("email"));
+			if($result != false){
+				//echo $result['reset_code'];	
+				Account::send_password_reset_mail($result['uid'], $result['reset_code']);
+				
+			}
+			$this->load->view("zb-two-forgot-password-sent");
 		} else {
 			$this->load->view("zb-two-forgot-password");
 		}
@@ -516,21 +549,17 @@ class Account extends CI_Controller {
 	
 	function register(){
 		$errors = Account::register_errors();
-		if($errors['count'] > 0){
+		if(count($errors) > 0){
 			$data=Account::account_forms();
 			$data['register_errors']=$errors;
-			$data['header']['title'] = 'Home';
-			$data['page'] = 'home';
-			$this->load->view('zbview',$data);
+			$this->load->view('zb-two-login',$data);
 		}else{
 			$this->load->model('accountmodel');
 			$this->accountmodel->register();
-			Account::send_verification_mail($this->input->post('firstname'),$this->input->post('lastname'),$this->input->post('email'),$this->input->post('confirmpassword'),true);
+			Account::send_verification_mail($this->input->post('name'),$this->input->post('email'),$this->input->post('password'),true);
 			$data = Account::account_forms();
-			$data['header']['title'] = 'Registration Successful';
-			$data['page'] = 'registered';
 			$data['email'] = $this->input->post('email');
-			$this->load->view('zbview',$data);
+			$this->load->view('zb-two-register-sent',$data);
 		}
 		
 		
@@ -555,7 +584,7 @@ class Account extends CI_Controller {
 			$data['header']['title'] = 'Verification Successful';
 			$data['page'] = 'verified';
 			$data['user'] = $temp;
-			$this->load->view('zbview',$data);
+			$this->load->view('zb-two-register-success',$data);
 		}else{
 			redirect('/','location');	
 		}
@@ -582,36 +611,36 @@ class Account extends CI_Controller {
 	
 	private function register_errors(){
 		$error = array();
-        $error["count"] = 0;
+       // $error["count"] = 0;
 
         //$error["email"] = "";
         $eden = "/^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@eden.rutgers.edu$/";
 		$scarlet = "/^[^\W][a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*\@scarletmail.rutgers.edu$/";
 		$standard = "/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/";
 		
-		//if(!preg_match($eden , $this->input->post('email')) && !preg_match($scarlet , $this->input->post('email'))) {
-        if(!preg_match($standard , $this->input->post('email'))) {
-            $error["email"] = 'You must enter a valid Rutgers student email! (*@eden.rutgers.edu)';
-            $error["count"] += 1;
+		if(!preg_match($eden , $this->input->post('email')) && !preg_match($scarlet , $this->input->post('email'))) {
+        //if(!preg_match($standard , $this->input->post('email'))) {
+            $error["email"] = 'You must enter a valid Rutgers student email! (*@eden.rutgers.edu or *@scarletmail.rutgers.edu)';
+            //$error["count"] += 1;
         }
         else {
 			$this->load->model('accountmodel');
 			if($this->accountmodel->is_registered()){
 				$error["email"] = "This user already exists!";
-                $error["count"] += 1;
+                //$error["count"] += 1;
 			} 
         }
 
         $pstr = "/\b[a-z A-Z]+\b/";
         if(!preg_match($pstr, $this->input->post("name"))) {
             $error["name"] = "Enter a real name!";
-            $error["count"] += 1;
+            //$error["count"] += 1;
         }
 
         $plen = strlen($this->input->post("password"));
         if($plen > 32 || $plen < 6){
             $error["password"] = "Password must be between 6-32 characters!";
-            $error["count"] += 1;
+            //$error["count"] += 1;
         }
 		
 		return $error;
@@ -619,28 +648,25 @@ class Account extends CI_Controller {
 	}
 	
 	
-	private function send_verification_mail($firstname, $lastname, $email, $password, $needtohash) {
+	private function send_verification_mail($name, $email, $password, $needtohash) {
 		$this->load->model('accountmodel');
+		
+		if($needtohash)
+			$password = $this->accountmodel->password_hash($password);
 		
 		$temp = $this->accountmodel->get_temp_account(
 			$email,
-			$this->accountmodel->password_hash($password)
+			$password
 		);
-		if($needtohash==true){
-			$verification_code = $this->accountmodel->verification_code(
-				$email,
-				$this->accountmodel->password_hash($password),
-				$temp->verificationsent
-			);
-		}else{
-			$verification_code = $this->accountmodel->verification_code(
-				$email,
-				$password,
-				$temp->verificationsent
-			);
-		}
+		
+		$verification_code = $this->accountmodel->verification_code(
+			$email,
+			$password,
+			$temp['verificationsent']
+		);
+		
 			
-		$data['verification_url']=site_url('/account/verify').'/'.$temp->tuid.'/'.$verification_code;
+		$data['verification_url']=site_url('/account/verify').'/'.$temp['tuid'].'/'.$verification_code;
 		$html=$this->load->view('zbemail',$data,true);
 		
 		
@@ -652,7 +678,7 @@ class Account extends CI_Controller {
 --zingboundary
 Content-type: text/plain;charset=utf-8
 
-Dear ' . $firstname . ' ' . $lastname . ',
+Dear ' . $name . ',
 
 Thank you for registering at www.zingberry.com. You may now log in using the following email and password after confirmation:
 
@@ -661,7 +687,7 @@ password: ' . $password . '
 
 You may confirm by clicking on this link or copying and pasting it in your browser:
 
-<a href="' . site_url('/account/verify') . '/'. $temp->tuid . '/' . $verification_code . '">' . site_url('/account/verify') . '/'. $temp->tuid . '/' . $verification_code . '</a>
+' . site_url('/account/verify') . '/'. $temp['tuid'] . '/' . $verification_code . '
 
 
 
@@ -678,38 +704,22 @@ Content-type: text/html;charset=utf-8
 '; // Our message  
   		$headers  = 'MIME-Version: 1.0' . "\r\n";
 		$headers .= 'Content-Type: multipart/alternative;boundary=zingboundary; charset=iso-8859-1' . "\r\n";
-        $headers .= 'From:noreply@zingberry.com' . "\r\n"; // Set from headers  
+        $headers .= 'From:"Zingberry" <noreply@zingberry.com>' . "\r\n"; // Set from headers  
         return mail($to, $subject, $message, $headers); // Send our email  
         
     }
 
 
-	private function send_password_reset_mail($firstname, $lastname, $email, $password, $needtohash) {
+	private function send_password_reset_mail($uid, $reset_code) {
 		$this->load->model('accountmodel');
 		
-		$temp = $this->accountmodel->get_temp_account(
-			$email,
-			$this->accountmodel->password_hash($password)
-		);
-		if($needtohash==true){
-			$verification_code = $this->accountmodel->verification_code(
-				$email,
-				$this->accountmodel->password_hash($password),
-				$temp->verificationsent
-			);
-		}else{
-			$verification_code = $this->accountmodel->verification_code(
-				$email,
-				$password,
-				$temp->verificationsent
-			);
-		}
+		$user = $this->accountmodel->get_account_by_uid($uid);
 			
-		$data['reset_url']=site_url('/account/passwordreset').'/'.$temp->tuid.'/'.$verification_code;
-		$html=$this->load->view('zbemail',$data,true);
+		$data['reset_url']=site_url('/account/forgotpassword').'/'.$reset_code;
+		//$html=$this->load->view('zbemail',$data,true);
 		
 		
-        $to = $email;   
+        $to = $user['email'];   
         $subject = 'Zingberry Password Reset';  
         $message = ' 
 
@@ -717,11 +727,11 @@ Content-type: text/html;charset=utf-8
 --zingboundary
 Content-type: text/plain;charset=utf-8
 
-Dear ' . $firstname . ' ' . $lastname . ',
+Dear ' . $user['firstname'] . ' ' . $user['lastname'] . ',
 
 You can reset your password by clicking on this link or copying and pasting it in your browser:
 
-<a href="' . $data['reset_url'] . '">' . $data['reset_url']. '</a>
+' . $data['reset_url']. '
 
 
 
@@ -733,7 +743,7 @@ You can reset your password by clicking on this link or copying and pasting it i
 '; // Our message  
   		$headers  = 'MIME-Version: 1.0' . "\r\n";
 		$headers .= 'Content-Type: multipart/alternative;boundary=zingboundary; charset=iso-8859-1' . "\r\n";
-        $headers .= 'From:noreply@zingberry.com' . "\r\n"; // Set from headers  
+        $headers .= 'From:"Zingberry" <noreply@zingberry.com>' . "\r\n"; // Set from headers  
         return mail($to, $subject, $message, $headers); // Send our email  
         
     }

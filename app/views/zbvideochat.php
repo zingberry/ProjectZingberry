@@ -93,7 +93,22 @@
 						$("#openCloseIdentifier4").hide();
 					}
 				}); 
-			});
+			if ($("#openCloseIdentifier4").is(":hidden")) {
+				$("#slider4").animate({ 
+					marginLeft: "-240px"
+					}, 500 );
+				
+				$("#openCloseIdentifier4").show();
+			} else {
+				$("#slider4").animate({ 
+					marginLeft: "0px"
+					}, 500 );
+				
+				$("#openCloseIdentifier4").hide();
+			}
+		  
+	});		
+			
 
 			//<!-- Define arrays for handling chat request info: source, date, message -->
 			
@@ -314,11 +329,11 @@
 							for (var i in requestObj)
 							{
 								htmlStr += "<li id=\"request_" + requestObj[i].requestor_uid + "\"><a href='javascript:void(0)'><span onmouseover=\"balloon.showTooltip(event,'" 
-									+ requestObj[i].request_message + "',0)\">"
+									+ requestObj[i].date_requested + "<br /> " + requestObj[i].request_message + "',0)\">"
 									+ requestObj[i].firstname + " " + requestObj[i].lastname 
-									+ " " + requestObj[i].date_requested + "</span></a>"
-									+ "<a href='javascript:deleteChatRequest(\"" + requestObj[i].requestor_uid + "\", \"request_" + requestObj[i].requestor_uid + "\");'><img src='<?=site_url('images')?>/delete_request.png' alt='Remove request'/></a>&nbsp;"
-									+ "<a href='javascript:makeJSVideoCall(\"" + requestObj[i].requestor_uid + "\", \"" + requestObj[i].firstname + " " + requestObj[i].lastname + "\");'><img src='<?=site_url('images')?>/accept_request.png' alt='Accept request'/></a>";
+									+ /*" " + requestObj[i].date_requested + */"</span></a>"
+									+ "<a href='javascript:makeJSVideoCall(\"" + requestObj[i].requestor_uid + "\", \"" + requestObj[i].firstname + " " + requestObj[i].lastname + "\");'><img src='<?=site_url('images')?>/accept_request.png' alt='Accept request'/></a>"
+									+ "<a href='javascript:deleteChatRequest(\"" + requestObj[i].requestor_uid + "\", \"request_" + requestObj[i].requestor_uid + "\");'><img src='<?=site_url('images')?>/delete_request.png' alt='Remove request'/></a>&nbsp;";
 								htmlStr += "</li>";	
 								numOfRequests++;
 							}
@@ -350,8 +365,7 @@
 				<a href="<?=site_url("account/logout")?>" class="log_out" title="Logout">&nbsp;</a>
 				<a href="<?=site_url("browse")?>" title="Zingberry!"><img src="images/mini_logo.png" alt="Zingberry!" /></a>
 				<ul>
-					<li><a class="video" alt="Call Nicholas (32)" onclick="makeTestJSCallToNick();" 
-							onmouseover="balloon.showTooltip(event,'Click to make a test call to Nicholas',0,250)">&nbsp;</a></li>
+					<li><a class="video" href="<?=site_url("video")?>">&nbsp;</a></li>
 					<li><a href="<?=site_url("account")?>" class="user">&nbsp;</a></li>
 				</ul>
 			</div>
@@ -411,7 +425,7 @@
 				</ul>
 			</div>			
 		</div>	
-		
+		<!--
 		<div id="sliderWrap3">
 			<div id="openCloseIdentifier3">
 			</div>
@@ -444,6 +458,7 @@
 				</div>
 			</div>
 		</div>
+        -->
 
 		<div id="sliderWrap4">			
 			<div id="openCloseIdentifier4">

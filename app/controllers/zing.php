@@ -8,6 +8,10 @@ class Zing extends CI_Controller{
 		Zing::about();
 	}
 	
+	function tutorial(){
+			$this->load->view('zb-two-tutorial');
+	}
+	
 	function about(){
 		$data['header']['title'] = 'About US';
 		$data['page'] = 'about';

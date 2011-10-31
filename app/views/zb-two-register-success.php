@@ -18,31 +18,6 @@ $(function(){
 $(document).ready(function() {
 		$(".topMenuAction").click( function() {
 			if ($("#openCloseIdentifier").is(":hidden")) {
-				
-				$('.forgot').qtip('hide');
-				$("#slider").animate({ 
-					marginLeft: "-320px"
-					}, 
-					500,
-					function(){
-					}
-				);
-				
-				$("#openCloseIdentifier").show();
-			} else {
-				$("#slider").animate({ 
-					marginLeft: "0px"
-					}, 
-					500,
-					function(){
-						$('.forgot').qtip('show');
-					} 
-				);
-				
-				$("#openCloseIdentifier").hide();
-			}
-		});  
-	if ($("#openCloseIdentifier").is(":hidden")) {
 				$("#slider").animate({ 
 					marginLeft: "-320px"
 					}, 500 );
@@ -51,14 +26,12 @@ $(document).ready(function() {
 			} else {
 				$("#slider").animate({ 
 					marginLeft: "0px"
-					}, 500 ,
-					function(){
-						$('.forgot').qtip('show');
-					} );
+					}, 500 );
 				
 				$("#openCloseIdentifier").hide();
-			}  
-	});				
+			}
+		});  
+	});			
 </script>
 
 <title>Zingberry!</title>
@@ -67,14 +40,18 @@ $(document).ready(function() {
 <body>
 	<div id="content">
     	<a href="<?=site_url("/")?>" class="logo" title="Zingberry!"><img src="images/logo_forgot_password.jpg" alt="Zingberry!" /></a>
-        <form name="frm_login" action="<?=current_url()?>" method="post">
+        <!--<form name="frm_login" action="#" method="post">
         	<ul class="form">
             	<li>Forgot Password?</li>
-                <li><input type="text" name="email" title="Rutgers Email" /></li>
+                <li><input type="text" name="txt_email" title="Rutgers Email" /></li>
                 <li><input type="submit" class="sub" value="Send" /></li>
             </ul>
-        </form>
-    	
+        </form>-->
+
+       <div style="text-align:center;">
+                Your email has been verified!<br /><br />
+					Click here to login to Zingberry: <a href="<?=site_url('/')?>">Login</a>
+        </div>
     	
     </div>
     <div id="footer">

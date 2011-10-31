@@ -39,14 +39,15 @@ $(document).ready(function() {
 
 <body>
 	<div id="content">
-    	<a href="index.html" class="logo" title="Zingberry!"><img src="images/logo_forgot_password.jpg" alt="Zingberry!" /></a>
-        <form name="frm_login" action="#" method="post">
+    	<a href="<?=site_url("/")?>" class="logo" title="Zingberry!"><img src="images/logo_forgot_password.jpg" alt="Zingberry!" /></a>
+        <!--<form name="frm_login" action="#" method="post">
         	<ul class="form">
             	<li>Forgot Password?</li>
                 <li><input type="text" name="txt_email" title="Rutgers Email" /></li>
                 <li><input type="submit" class="sub" value="Send" /></li>
             </ul>
-        </form>
+        </form>-->
+        <div style="text-align:center;">Your password has been changed successfully!.</div>
     	
     	
     </div>
@@ -63,12 +64,12 @@ $(document).ready(function() {
     <div id="openCloseIdentifier"></div>
 		<div id="slider">
 			<div id="sliderContent">
-				<form name="frm_login" action="account.html" method="post">
+				<form name="frm_login" action="<?=site_url("account/login")?>" method="post">
                     <ul class="form_sm">
-                        <li><input type="text" name="txt_email" title="Rutgers Email" /></li>
-                        <li><input type="password" name="txt_password" title="Password" /></li>
-                        <li><input type="submit" class="sub" value="Login" /></li>
-                        <li><a href="forgot-password.html" class="forgot">Forgot Password?</a></li>
+                        <li><input type="text" name="email" title="Rutgers Email" /></li>
+                        <li><input type="password" name="password" title="Create a Password" /></li>
+                        <li><input type="submit" name="loginsubmit" class="sub" value="Login" /></li>
+                        <li><a href="<?=site_url("account/forgotpassword")?>" class="forgot">Forgot Password?</a></li>
                     </ul>
                 </form>
 			</div>

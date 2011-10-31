@@ -232,7 +232,7 @@ class Videorequestsmodel extends CI_Model{
 		{
 			// flag was true, so return only those requests with an online requestor
 			// now <= m_updatetime + timetolive
-			$str = "SELECT requestor_uid, firstname, lastname, date_requested, request_message 
+			$str = "SELECT requestor_uid, firstname, lastname, date_requested, request_message, m_updatetime
 					FROM users U, videochat_requests Q, videochat_registrations R 
 					WHERE Q.requestor_uid = R.uid AND Q.target_uid = ? AND U.uid = R.uid AND NOW() <= DATE_ADD(R.m_updatetime, INTERVAL ? MINUTE)";
 			$data = array($t_uid, $timetolive);

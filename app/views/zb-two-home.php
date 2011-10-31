@@ -8,11 +8,13 @@
 <link href="css/reset.css" type="text/css" media="all" rel="stylesheet" />
 <link href="css/style.css" type="text/css" media="all" rel="stylesheet" />
 <link href="css/jquery.bubblepopup.v2.3.1.css" rel="stylesheet" type="text/css" />
+<link href="css/jquery.qtip.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript" src="js/jquery_003.js"></script>
 <script type="text/javascript" src="js/jquery.hoverIntent.min.js"></script>
 <script type="text/javascript" src="js/blur.js"></script>
 <script type="text/javascript" src="js/jquery.bubblepopup.v2.3.1.min.js"></script>
+<script src="js/jquery.qtip.pack.js" type="text/javascript"></script>
 <script type="text/javascript">
 $.extend({URLEncode:function(c){var o='';var x=0;c=c.toString();var r=/(^[a-zA-Z0-9_.]*)/;
   while(x<c.length){var m=r.exec(c.substr(x));
@@ -27,10 +29,34 @@ URLDecode:function(s){var o=s;var binVal,t;var r=/(%[^%]{2})/;
 </script>
 <script type="text/javascript">
 $(function(){ 
+
+		<?php if(isset($search_errors) ){
+				foreach($search_errors as $i => $r){?>
+				$('form#search [name="<?=$i?>"]').qtip({
+				   content: '<?=$r?>',
+				   position: {
+					  my: 'top center', 
+					  at: 'bottom center'
+				   },
+				   show: {
+					   event: false,
+					   ready: true
+				   },
+				   hide: false,
+				   style: {
+					   width: '160px',
+					  classes: 'ui-tooltip-red'
+				   }
+				});
+			<?php } } ?>
 			    // find all the input elements with title attributes
 				$('input[title!=""]').hint();
 			});
 $(document).ready(function() {
+		<? if(isset($initial) && $initial){?>
+		window.open('<?=site_url('video')?>','newwin');
+		<? } ?>
+	
 		$("ul.outer li").hoverIntent(
 		function(){
 			$(this).find("ul.inner").fadeIn(100);
@@ -150,9 +176,7 @@ $(document).ready(function() {
 });			
 	function send_request(){
 		$("form#video_request").hide(); //hide the request form
-		var request_url = "<?=site_url("videorequest/request")?>" /*+ 
-			"/" + $("form#video_request  #uid").val()  +
-			"/" + $.URLEncode($("form#video_request  #message").val())*/;
+		var request_url = "<?=site_url("videorequest/request")?>";
 		var postdata = {
 			"uid": $("form#video_request  #uid").val(),
 			"message": $("form#video_request  #message").val()
@@ -181,7 +205,30 @@ $(document).ready(function() {
     	<div id="header">
         	<a href="<?=site_url("account/logout")?>" class="log_out" title="Logout">&nbsp;</a>
         	<a href="<?=site_url("browse")?>" title="Zingberry!"><img src="images/mini_logo.png" alt="Zingberry!" /></a>
-            <input type="text" value="" title="search similarities" />
+            <form id="search" action="<?=site_url("browse/search")?>" method="post" style="display:inline;">
+            	<select height=24 class="category" name="category">
+                	<option value="">Choose a Category</option>
+                	<option <? if($this->input->post('category')=='favorite_music_artists'){ echo 'selected="selected"';}?> value="favorite_music_artists">Favorite Music Artist</option>
+                	<option <? if($this->input->post('category')=='favorite_heroes'){ echo 'selected="selected"';}?> value="favorite_heroes">Hero</option>
+                	<option <? if($this->input->post('category')=='favorite_movies'){ echo 'selected="selected"';}?> value="favorite_movies">Favorite Movie</option>
+                	<option <? if($this->input->post('category')=='favorite_tvshows'){ echo 'selected="selected"';}?> value="favorite_tvshows">Favorite Tv Show</option>
+                	<option <? if($this->input->post('category')=='favorite_sports_teams'){ echo 'selected="selected"';}?> value="favorite_sports_teams">Favorite Sports Team</option>
+                	<option <? if($this->input->post('category')=='favorite_video_games'){ echo 'selected="selected"';}?> value="favorite_video_games">Favorite Video Game</option>
+                	<option <? if($this->input->post('category')=='favorite_books'){ echo 'selected="selected"';}?> value="favorite_books">Favorite Book</option>
+                	<option <? if($this->input->post('category')=='favorite_foods'){ echo 'selected="selected"';}?> value="favorite_foods">Favorite Food</option>
+                	<option <? if($this->input->post('category')=='organizations'){ echo 'selected="selected"';}?> value="organizations">Organization</option>
+                	<option <? if($this->input->post('category')=='workplaces'){ echo 'selected="selected"';}?> value="workplaces">Workplace</option>
+                	<option <? if($this->input->post('category')=='greeks'){ echo 'selected="selected"';}?> value="greeks">Greeks</option>
+                	<option <? if($this->input->post('category')=='courses'){ echo 'selected="selected"';}?> value="courses">Course</option>
+                	<option <? if($this->input->post('category')=='majors'){ echo 'selected="selected"';}?> value="majors">Major</option>
+                	<option <? if($this->input->post('category')=='highschool'){ echo 'selected="selected"';}?> value="highschool">High School</option>
+                	<option <? if($this->input->post('category')=='languages'){ echo 'selected="selected"';}?> value="languages">Language</option>
+                	<option <? if($this->input->post('category')=='nationalities'){ echo 'selected="selected"';}?> value="nationalities">Nationality</option>
+                	<option <? if($this->input->post('category')=='class'){ echo 'selected="selected"';}?> value="class">Class Year</option>
+                </select>
+            	<input name="term" class="term" type="text" value="<?=$this->input->post("term")?>" title="search similarities" />
+                <input class="submit" type="submit" value="search!" />
+            </form>
             <ul>
             	<li><a href="<?=site_url("video")?>" class="video">&nbsp;</a></li>
                 <li><a href="<?=site_url("account")?>" class="user">&nbsp;</a></li>
@@ -207,7 +254,7 @@ $(document).ready(function() {
                         display:none;
                     "><?=$u["user"]["firstname"].' '.$u["user"]["lastname"]?></div>
                     
-                <img class="img" src="./user_images/<? if(isset($u['pic']['filename'])){ echo "thumb_".$u['pic']['filename'];} else { echo "thumb_default.jpg";}?>" />
+                <img class="img" src="./user_images/<? if(isset($u['pic']['filename']) && file_exists('user_images/'."thumb_".$u['pic']['filename'])){ echo "thumb_".$u['pic']['filename'];} else { echo "thumb_default.jpg";}?>" />
                 <ul class="inner">
                 	<li><a href="#">Personal Information</a>
                     	<ul class="inner_most">

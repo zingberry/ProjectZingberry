@@ -1,6 +1,11 @@
 <?php
 
+
+
 class Accountmodel extends CI_Model{
+	
+
+	
 	
 	/*$tables = array(
 		"nationalities" => array()
@@ -36,6 +41,46 @@ class Accountmodel extends CI_Model{
 	 * 	Returns:	returns an array of all the data on a user
 	 */
 	 
+	 
+	function set_forgot_password($email){
+		$query = $this->db->query("SELECT * FROM users WHERE email=?",array($email));
+		
+		if($query->num_rows() == 0)
+			return false;
+			
+		$row = $query->row_array();
+		
+		//print_r($row);
+		
+		$reset_code = sha1($row['email'].time().$row['password']);
+		$query = $this->db->query("UPDATE users SET password_reset_code=? WHERE uid=? LIMIT 1", array($reset_code,$row['uid']));
+		
+		/*if($this->db->affected_rows()!=1)
+			return false;*/
+		
+		return array(
+				"uid" => $row['uid'],
+				"reset_code" => $reset_code
+				);
+		
+	}
+	
+	function reset_password($email, $password, $reset_code){
+		$query = $this->db->query("SELECT uid FROM users WHERE email=? AND password_reset_code=? LIMIT 1",array($email,$reset_code));
+		
+		if($query->num_rows() == 0)
+			return false;
+		
+		$row = $query->row_array();
+		$pass = Accountmodel::password_hash($password);
+		$query = $this->db->query("UPDATE users SET password=?, password_reset_code=NULL WHERE uid=?",array($pass,$row['uid']));
+		
+		if($this->db->affected_rows()!=1)
+			return false;
+			
+		return true;
+		
+	}
 	 
 	function get_user_pic($uid){
 		$data = array(
@@ -97,7 +142,7 @@ class Accountmodel extends CI_Model{
 		);
 		$query = $this->db->query('SELECT * from tempusers WHERE email = ? AND password = ? LIMIT 1', $data);
 		
-		return $query->row();
+		return $query->row_array();
 		
 	}
 	
@@ -179,8 +224,6 @@ class Accountmodel extends CI_Model{
             (
 		   		`firstname`,
 				`lastname`,
-				`gender`,
-				`class`,
 				`email`,
 				`password`,
 				`lastip`,
@@ -188,8 +231,6 @@ class Accountmodel extends CI_Model{
 			) VALUES (
                 ? , 
                 ? ,
-                ? , 
-                ? , 
                 ? , 
                 ? , 
                 ? , 
@@ -208,9 +249,6 @@ class Accountmodel extends CI_Model{
 		$data = array(
 			$firstname,
 			$lastname,
-			$this->input->post('lastname',TRUE),
-			$this->input->post('gender',TRUE),
-			$this->input->post('class',TRUE),
 			$this->input->post('email',TRUE),
 			Accountmodel::password_hash($this->input->post('password')),
 			$this->input->ip_address()
@@ -229,15 +267,11 @@ class Accountmodel extends CI_Model{
             (
 		   		`firstname`,
 				`lastname`,
-				`gender`,
-				`class`,
 				`email`,
 				`password`,
 				`membersince`,
 				`lastip`
 			) VALUES (
-                ? , 
-                ? ,
                 ? , 
                 ? , 
                 ? , 
@@ -249,8 +283,6 @@ class Accountmodel extends CI_Model{
 		$data = array(
 			$temp['firstname'],
 			$temp['lastname'],
-			$temp['gender'],
-			$temp['class'],
 			$temp['email'],
 			$temp['password'],
 			$this->input->ip_address()
@@ -703,12 +735,63 @@ class Accountmodel extends CI_Model{
 		return $result;
 	}
 	
+	
+	
+	function search_by_category($category, $term){
+		if($category == 'class'){
+			$data=array(
+				$this->session->userdata('uid'),
+				$term
+			
+			);
+			$query_string = "SELECT uid FROM users WHERE uid != ? AND class = ? ";
+			
+			$query = $this->db->query($query_string,$data);
+			
+			
+		} else {
+			$rel_tables = Accountmodel::rel_tables();
+			$data=array(
+				$this->session->userdata('uid')
+			);
+			$a = $rel_tables[$category]['table'];
+			$b = $rel_tables[$category]['rel_table'];
+			$id = $rel_tables[$category]['id'];
+			$query_string = "SELECT uid FROM $a,$b WHERE uid != ? AND $a.$id = $b.$id ";
+			
+			$terms = explode(" ", $term);
+			
+			foreach($terms as $t){
+				$query_string .= " AND (".$rel_tables[$category]['name']." LIKE ?) ";
+				array_push($data,"%".$t."%");
+			}
+			
+			$query_string .= " GROUP BY uid";
+			
+			$query = $this->db->query($query_string,$data);
+		}
+
+
+		$result = array();
+		foreach($query->result_array() as $i){
+			array_push($result, $i['uid']);
+		}		
+		return $result;
+		
+			
+	}
+	
 	function get_random_uids($limit){
 		$data = array(
 			$this->session->userdata('uid'),
 			$limit
 		);
-		$query = $this->db->query("SELECT uid FROM users WHERE uid != ? AND uid >= (SELECT FLOOR( MAX(uid) * RAND()) FROM users ) ORDER BY uid LIMIT ?",$data);
+		
+		//randomizer query? kinda works for larger sets only...
+		//$query = $this->db->query("SELECT uid FROM users WHERE uid != ? AND uid >= (SELECT FLOOR( MAX(uid) * RAND()) FROM users ) ORDER BY uid LIMIT ?",$data);
+		
+		//standard query
+		$query = $this->db->query("SELECT uid FROM users WHERE uid != ? LIMIT ?",$data);
 		
 		$result = array();
 		foreach($query->result_array() as $i){
@@ -718,6 +801,205 @@ class Accountmodel extends CI_Model{
 		return $result;
 	}
 	
+	function rel_tables(){
+		return array(
+			"favorite_music_artists" => array(
+				"table" => "favorite_music_artists",
+				"rel_table" => "has_favorite_music_artist",
+				"id" => "artist_id",
+				"name" => "artist_name"
+			),
+			"favorite_heroes" => array(
+				"table" => "favorite_heroes",
+				"rel_table" => "has_favorite_hero",
+				"id" => "fhid",
+				"name" => "name"
+			),
+			"favorite_movies" => array(
+				"table" => "favorite_movies",
+				"rel_table" => "has_favorite_movie",
+				"id" => "movie_id",
+				"name" => "movie_title"
+			),
+			"favorite_tvshows" => array(
+				"table" => "favorite_tvshows",
+				"rel_table" => "has_favorite_tvshow",
+				"id" => "tvshow_id",
+				"name" => "tvshow_title"
+			),
+			"favorite_sports_teams" => array(
+				"table" => "favorite_sports_teams",
+				"rel_table" => "has_favorite_sports_team",
+				"id" => "team_id",
+				"name" => "team_name"
+			),
+			"favorite_video_games" => array(
+				"table" => "favorite_video_games",
+				"rel_table" => "has_favorite_video_game",
+				"id" => "video_game_id",
+				"name" => "video_game_title"
+			),
+			"favorite_books" => array(
+				"table" => "favorite_books",
+				"rel_table" => "has_favorite_book",
+				"id" => "book_id",
+				"name" => "book_title"
+			),
+			"favorite_foods" => array(
+				"table" => "favorite_foods",
+				"rel_table" => "has_favorite_food",
+				"id" => "ffid",
+				"name" => "name"
+			),
+			"organizations" => array(
+				"table" => "organizations",
+				"rel_table" => "is_member_of_organization",
+				"id" => "oid",
+				"name" => "name"
+			),
+			"workplaces" => array(
+				"table" => "workplaces",
+				"rel_table" => "works_at",
+				"id" => "wid",
+				"name" => "name"
+			),
+			"greeks" => array(
+				"table" => "greeks",
+				"rel_table" => "is_member_of_greek",
+				"id" => "greek_id",
+				"name" => "name"
+			),
+			"courses" => array(
+				"table" => "courses",
+				"rel_table" => "is_taking_course",
+				"id" => "courseid",
+				"name" => "course_name"
+			),
+			"majors" => array(
+				"table" => "majors",
+				"rel_table" => "has_major",
+				"id" => "mid",
+				"name" => "major"
+			),
+			"highschool" => array(
+				"table" => "highschool",
+				"rel_table" => "has_highschool",
+				"id" => "hid",
+				"name" => "name"
+			),
+			"languages" => array(
+				"table" => "languages",
+				"rel_table" => "speaks_language",
+				"id" => "langid",
+				"name" => "language"
+			),
+			"nationalities" => array(
+				"table" => "nationalities",
+				"rel_table" => "has_nationality",
+				"id" => "nid",
+				"name" => "nationality"
+			)
+		);
+	}
 }
+
+/*$rel_tables = array(
+		"favorite_music_artists" => array(
+			"table" => "favorite_music_artists",
+			"rel_table" => "has_favorite_music_artist",
+			"id" => "artist_id",
+			"name" => "artist_name"
+		),
+		"favorite_heroes" => array(
+			"table" => "favorite_heroes",
+			"rel_table" => "has_favorite_hero",
+			"id" => "fhid",
+			"name" => "name"
+		),
+		"favorite_movies" => array(
+			"table" => "favorite_movies",
+			"rel_table" => "has_favorite_movie",
+			"id" => "movie_id",
+			"name" => "movie_title"
+		),
+		"favorite_tvshows" => array(
+			"table" => "favorite_tvshows",
+			"rel_table" => "has_favorite_tvshow",
+			"id" => "tvshow_id",
+			"name" => "tvshow_title"
+		),
+		"favorite_sports_teams" => array(
+			"table" => "favorite_sports_teams",
+			"rel_table" => "has_favorite_sports_team",
+			"id" => "team_id",
+			"name" => "team_name"
+		),
+		"favorite_video_games" => array(
+			"table" => "favorite_video_games",
+			"rel_table" => "has_favorite_video_game",
+			"id" => "video_game_id",
+			"name" => "video_game_title"
+		),
+		"favorite_books" => array(
+			"table" => "favorite_books",
+			"rel_table" => "has_favorite_book",
+			"id" => "book_id",
+			"name" => "book_title"
+		),
+		"favorite_foods" => array(
+			"table" => "favorite_foods",
+			"rel_table" => "has_favorite_food",
+			"id" => "ffid",
+			"name" => "name"
+		),
+		"organizations" => array(
+			"table" => "organizations",
+			"rel_table" => "is_member_of_organization",
+			"id" => "oid",
+			"name" => "name"
+		),
+		"workplaces" => array(
+			"table" => "workplaces",
+			"rel_table" => "works_at",
+			"id" => "wid",
+			"name" => "name"
+		),
+		"greeks" => array(
+			"table" => "greeks",
+			"rel_table" => "is_member_of_greek",
+			"id" => "greek_id",
+			"name" => "name"
+		),
+		"courses" => array(
+			"table" => "courses",
+			"rel_table" => "is_taking_course",
+			"id" => "courseid",
+			"name" => "course_name"
+		),
+		"majors" => array(
+			"table" => "majors",
+			"rel_table" => "has_major",
+			"id" => "mid",
+			"name" => "major"
+		),
+		"highschool" => array(
+			"table" => "highschool",
+			"rel_table" => "has_highschool",
+			"id" => "hid",
+			"name" => "name"
+		),
+		"languages" => array(
+			"table" => "languages",
+			"rel_table" => "speaks_language",
+			"id" => "langid",
+			"name" => "language"
+		),
+		"nationalities" => array(
+			"table" => "nationalities",
+			"rel_table" => "has_nationality",
+			"id" => "nid",
+			"name" => "nationality"
+		)
+	);*/
 
 ?>

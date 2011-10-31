@@ -146,8 +146,8 @@ $(document).ready(function() {
     	
         <div id="body">
         	<h2>Display Picture</h2>
-            <?php if(file_exists($upload_folder.$thumb_image)){ ?>
-                Current Pic (Crop by dragging your mouse):<br />
+            <?php if(isset($thumb_image) && isset($upload_folder) && file_exists($upload_folder.$thumb_image)){ ?>
+                Current Pic:<br />
                 <img src="<?=$upload_folder.$thumb_image?>" />
             <?php } ?>
             <br />
@@ -208,6 +208,5 @@ $(document).ready(function() {
      </div>
      
      
-	
 </body>
 </html>

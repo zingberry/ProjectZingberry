@@ -13,7 +13,7 @@ ul.form_sm li		{ line-height:30px;}
 ul.form_sm input	{ width:160px; border:none;font-family:"Myriad Pro", "Century Gothic", Arial; font-weight:bold; font-size:14px; background:#f6f6f5; text-align:center; padding:2px; height:20px;color:#6f6f6f;}
 ul.form_sm input.sub	{ background:url(../images/login_button_sm.jpg) center top no-repeat; width:80px;}
 ul.form_sm a.forgot		{ font-style:italic; text-align:right; text-decoration:underline;color:#6f6f6f; font-size:13px; width:180px; display:inline-block}
-#slideshow{height:330px; width:850px;margin-top:130px}#slides{height:310px; position:relative}.slide{height:315px; width:830px; overflow:hidden; position:absolute;color:#fff}#slides-controls{width:60px; background-color:#fff; height:20px; margin-left:auto; margin-right:auto; padding:5px}#slides-controls a{margin:5px; width:8px; height:8px; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; -o-border-radius:4px; background:#666666; border:1px solid #fff; text-indent:-9000px; display:block; overflow:hidden; float:left}#slides-controls a:hover{background:#666666}#slides-controls a.highlight{background:#666666; border:1px solid #666666}
+#slideshow{height:330px; width:850px;margin-top:130px}#slides{height:310px; position:relative}.slide{height:315px; width:830px; overflow:hidden; position:absolute;color:#fff}#slides-controls{width:60px; background-color:#fff; height:20px; margin-left:auto; margin-right:auto; padding:5px}#slides-controls a{margin:5px; width:8px; height:8px; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; -o-border-radius:4px; background:#666666; border:1px solid #666666; text-indent:-9000px; display:block; overflow:hidden; float:left}#slides-controls a:hover{background:#666666}#slides-controls a.highlight{background:#6DCC28; border:1px solid #6DCC28}
 
 #header				{ background:url(../images/header_bg.jpg) top left no-repeat; width:775px; height:90px; padding:2px 10px 8px 40px; text-align:left;}
 a.log_out			{ background:url(../images/logout.png) top left no-repeat; width:20px; height:20px; display:inline-block; float:right;}
@@ -29,7 +29,9 @@ a.log_out:hover		{ background:url(../images/close_hover.png) top left no-repeat;
 #header	ul li a.marketplace:hover	{ background:url(../images/icons_hover.png) -40px 0px no-repeat;}
 #header	ul li a.events:hover		{ background:url(../images/icons_hover.png) -80px 0px no-repeat;}
 #header	ul li a.user:hover			{ background:url(../images/icons_hover.png) -120px 0px no-repeat;}
-#header	input			{ width:460px; vertical-align:top; margin-top:40px; border:#999 1px solid;font-family:"Myriad Pro", "Century Gothic", Arial; font-weight:bold; font-size:14px; background:#FFF; text-align:center; padding:2px; height:20px;color:#6f6f6f;}
+#header	input.term			{ width:260px; vertical-align:top; margin-top:40px; border:#999 1px solid;font-family:"Myriad Pro", "Century Gothic", Arial; font-weight:bold; font-size:14px; background:#FFF; text-align:center; padding:2px; height:20px;color:#6f6f6f;}
+#header	select.category			{ width:150x; vertical-align:top; margin-top:40px; border:#999 1px solid;font-family:"Myriad Pro", "Century Gothic", Arial; font-weight:bold; font-size:14px; background:#FFF; text-align:center; padding:2px; height:26px;color:#6f6f6f;}
+#header	input.submit			{vertical-align:top; margin-top:40px; border:#999 1px solid;font-family:"Myriad Pro", "Century Gothic", Arial; font-weight:bold; font-size:14px; background:#6DCC28; text-align:center; height:26px;color:#fff;}
 
 
 
@@ -104,7 +106,7 @@ openCloseIdentifier2 { display:none;}
 #openCloseWrap3 	{position:absolute;margin: 00px 0 0 270px;height:393px;background:url(../images/filter-search.png) top right no-repeat;}
 #topMenuImage3		{width:50px;	height:393px;	display:inline-block;}
 
-#slider4 			{position:absolute; background-image:url(../images/left_menu_bg.jpg);background-repeat:repeat-x;background-position: bottom;width: 280px;height: 245px;margin-left: -280px;top:500px;}
+#slider4 			{position:absolute; background-image:url(../images/left_menu_bg.jpg);background-repeat:repeat-x;background-position: bottom;width: 280px;height: 245px;margin-left: -320px;top:100px;}
 #slider4 img 		{border: 0;}
 #sliderContent4 	{margin: 15px 0 0 10px;position: absolute;text-align:center; font-size:14px;overflow:auto; height:220px;width:250px;}
 #openCloseWrap4 	{position:absolute;margin: 00px 0 0 270px;height:250px;background:url(../images/chat_requests.png) top right no-repeat;}
