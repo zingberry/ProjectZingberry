@@ -29,7 +29,7 @@ a.log_out:hover		{ background:url(../images/close_hover.png) top left no-repeat;
 #header	ul li a.marketplace:hover	{ background:url(../images/icons_hover.png) -40px 0px no-repeat;}
 #header	ul li a.events:hover		{ background:url(../images/icons_hover.png) -80px 0px no-repeat;}
 #header	ul li a.user:hover			{ background:url(../images/icons_hover.png) -120px 0px no-repeat;}
-#header	input.term			{ width:260px; vertical-align:top; margin-top:40px; border:#999 1px solid;font-family:"Myriad Pro", "Century Gothic", Arial; font-weight:bold; font-size:14px; background:#FFF; text-align:center; padding:2px; height:20px;color:#6f6f6f;}
+#header	input.term			{ width:240px; vertical-align:top; margin-top:40px; border:#999 1px solid;font-family:"Myriad Pro", "Century Gothic", Arial; font-weight:bold; font-size:14px; background:#FFF; text-align:center; padding:2px; height:20px;color:#6f6f6f;}
 #header	select.category			{ width:150x; vertical-align:top; margin-top:40px; border:#999 1px solid;font-family:"Myriad Pro", "Century Gothic", Arial; font-weight:bold; font-size:14px; background:#FFF; text-align:center; padding:2px; height:26px;color:#6f6f6f;}
 #header	input.submit			{vertical-align:top; margin-top:40px; border:#999 1px solid;font-family:"Myriad Pro", "Century Gothic", Arial; font-weight:bold; font-size:14px; background:#6DCC28; text-align:center; height:26px;color:#fff;}
 

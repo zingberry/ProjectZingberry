@@ -140,7 +140,7 @@ $(document).ready(function() {
 		var popWidth = dim[0].split('=')[1]; //Gets the first query string value
 
 		//Fade in the Popup and add close button
-		$('#' + popID).fadeIn().css({ 'width': Number( popWidth ) }).prepend('<a href="#" class="close"><img src="images/close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>');
+		$('#' + popID).fadeIn().css({ 'width': Number( popWidth ) }).prepend('<a href="javascript:void(0)" class="close"><img src="images/close_pop.png" class="btn_close" title="Close Window" alt="Close" /></a>');
 		
 		//Define margin for center alignment (vertical + horizontal) - we add 80 to the height/width to accomodate for the padding + border width defined in the css
 		var popMargTop = ($('#' + popID).height() + 80) / 2;
@@ -213,7 +213,7 @@ $(document).ready(function() {
                 	<option <? if($this->input->post('category')=='favorite_movies'){ echo 'selected="selected"';}?> value="favorite_movies">Favorite Movie</option>
                 	<option <? if($this->input->post('category')=='favorite_tvshows'){ echo 'selected="selected"';}?> value="favorite_tvshows">Favorite Tv Show</option>
                 	<option <? if($this->input->post('category')=='favorite_sports_teams'){ echo 'selected="selected"';}?> value="favorite_sports_teams">Favorite Sports Team</option>
-                	<option <? if($this->input->post('category')=='favorite_video_games'){ echo 'selected="selected"';}?> value="favorite_video_games">Favorite Video Game</option>
+                	<option <? if($this->input->post('category')=='favorite_video_games'){ echo 'selected="selected"';}?> value="favorite_video_games">Favorite Game</option>
                 	<option <? if($this->input->post('category')=='favorite_books'){ echo 'selected="selected"';}?> value="favorite_books">Favorite Book</option>
                 	<option <? if($this->input->post('category')=='favorite_foods'){ echo 'selected="selected"';}?> value="favorite_foods">Favorite Food</option>
                 	<option <? if($this->input->post('category')=='organizations'){ echo 'selected="selected"';}?> value="organizations">Organization</option>
@@ -256,7 +256,7 @@ $(document).ready(function() {
                     
                 <img class="img" src="./user_images/<? if(isset($u['pic']['filename']) && file_exists('user_images/'."thumb_".$u['pic']['filename'])){ echo "thumb_".$u['pic']['filename'];} else { echo "thumb_default.jpg";}?>" />
                 <ul class="inner">
-                	<li><a href="#">Personal Information</a>
+                	<li><a href="javascript:void(0)">Personal Information</a>
                     	<ul class="inner_most">
                         	<li class="name"><b><?=$u["user"]["firstname"].' '.$u["user"]["lastname"]?></b></li>
                         	<li class="title">Class Year</li>
@@ -279,14 +279,14 @@ $(document).ready(function() {
                             	<li class="data"><?=$u["user"]["political_views"]?></li>
                         </ul>
                     </li>
-                     <li><a href="#">Academics </a>
+                     <li><a href="javascript:void(0)">Academics </a>
                     <ul class="inner_most">
                         	<li class="title">Major</li>
                             	<li class="data"><?=implode(", ",$u['majors'])?></li>
                             <li class="title">Classes</li>
                             	<li class="data"><?=implode("<br />",$u['courses'])?></li>
                         </ul>
-                    <li><a href="#">Organizations</a>
+                    <li><a href="javascript:void(0)">Organizations</a>
                     <ul class="inner_most">
                         	<li class="title">Organization</li>
                             <li class="data"><?=implode(", ",$u['organizations'])?></li>
@@ -296,7 +296,7 @@ $(document).ready(function() {
                             <li class="data"><?=implode(", ",$u['workplaces'])?></li>
                            
                         </ul></li>
-                    <li><a href="#">Interests </a>
+                    <li><a href="javascript:void(0)">Interests </a>
                     <ul class="inner_most">
                         	<li class="title">Favorite Music Artists</li>
                             <li class="data"><?=implode(", ",$u['favorite_music_artists'])?></li>
@@ -308,7 +308,7 @@ $(document).ready(function() {
                             <li class="data"><?=implode(", ",$u['favorite_tvshows'])?></li>
                             <li class="title">Favorite Sports Teams</li>
                             <li class="data"><?=implode(", ",$u['favorite_sports_teams'])?></li>
-                            <li class="title">Favorite Video Games</li>
+                            <li class="title">Favorite Games</li>
                             <li class="data"><?=implode(", ",$u['favorite_video_games'])?></li>
                             <li class="title">Favorite Books</li>
                             <li class="data"><?=implode(", ",$u['favorite_books'])?></li>
