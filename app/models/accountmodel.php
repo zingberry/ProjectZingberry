@@ -784,19 +784,26 @@ class Accountmodel extends CI_Model{
 	function get_random_uids($limit){
 		$data = array(
 			$this->session->userdata('uid'),
-			$limit
+			/*$limit*/
 		);
 		
 		//randomizer query? kinda works for larger sets only...
 		//$query = $this->db->query("SELECT uid FROM users WHERE uid != ? AND uid >= (SELECT FLOOR( MAX(uid) * RAND()) FROM users ) ORDER BY uid LIMIT ?",$data);
 		
 		//standard query
-		$query = $this->db->query("SELECT uid FROM users WHERE uid != ? LIMIT ?",$data);
+		//$query = $this->db->query("SELECT uid FROM users WHERE uid != ? LIMIT ?",$data);
+
+		$query = $this->db->query("SELECT uid FROM users WHERE uid != ?",$data);
 		
 		$result = array();
 		foreach($query->result_array() as $i){
 			array_push($result, $i['uid']);
 		}
+		
+		shuffle($result);
+		if(count($result) > 15)
+			$result = array_slice($result,0,$limit);
+		                    
 		
 		return $result;
 	}
