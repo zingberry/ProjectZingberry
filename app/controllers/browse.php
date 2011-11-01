@@ -16,8 +16,6 @@ class Browse extends CI_Controller{
 		
 		$random_users = $this->accountmodel->get_random_uids(15);
 		
-		shuffle($random_users);
-		
 		foreach($random_users as $user){
 			array_push($data['users'],$this->accountmodel->get_profile_by_uid($user));
 		}
@@ -51,8 +49,6 @@ class Browse extends CI_Controller{
 		);
 		
 		$random_users = $this->accountmodel->get_random_uids(15);
-		
-		shuffle($random_users);
 		
 		foreach($random_users as $user){
 			array_push($data['users'],$this->accountmodel->get_profile_by_uid($user));
@@ -91,7 +87,6 @@ class Browse extends CI_Controller{
 				$users = array_slice($users,0,15);
 		} else {
 			$users = $this->accountmodel->get_random_uids(15);
-			shuffle($users);
 		}
 		
 		
