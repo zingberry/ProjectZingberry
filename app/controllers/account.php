@@ -193,7 +193,7 @@ class Account extends CI_Controller {
 			
 			
 			$config['upload_path'] = $upload_folder;
-			$config['allowed_types'] = 'gif|jpg|png';
+			$config['allowed_types'] = 'gif|jpg|jpeg|png';
 			$config['file_name'] = $this->session->userdata('uid').'_'.time();
 			/*$config['max_size']	= '100';
 			$config['max_width']  = '1024';
@@ -214,12 +214,39 @@ class Account extends CI_Controller {
 					$upload_folder.$data['upload_data']['file_name']
 				);
 				
+				//0 is width, 1 is height
+				$size = getimagesize($upload_folder.$data['upload_data']['file_name']);		
+				$minsize = min($size[0],$size[1]);
+				$maxsize = max($size[0],$size[1]);
+				
+				$leftoffset = 0;
+				$topoffset = 0;
+				
+				if($maxsize != $minsize){
+					if($size[0] == $maxsize) 	//if width is larger
+						$leftoffset = ($maxsize-$minsize)/2;
+					else						//if height is larger
+						$topoffset = ($maxsize-$minsize)/2;					
+				}
+				print_r(array($minsize,$maxsize,$leftoffset,$topoffset));
+				
+				//create default thumbnail out of the largest center of a picture
+				Account::crop_and_resize_pic(
+					$leftoffset,
+					$topoffset,
+					/*$leftoffset + */$minsize,
+					/*$topoffset + */ $minsize,
+					$upload_folder.$data['upload_data']['file_name'],
+					$upload_folder."thumb_".$data['upload_data']['file_name']
+				);
+				
+				
 				$userimage = $this->accountmodel->get_user_pic($this->session->userdata('uid'));
 				if($userimage!=NULL){
 					if(file_exists($upload_folder.$userimage['filename']))
 						unlink($upload_folder.$userimage['filename']);
 					if(file_exists($upload_folder."thumb_".$userimage['filename']))
-					unlink($upload_folder."thumb_".$userimage['filename']);
+						unlink($upload_folder."thumb_".$userimage['filename']);
 				}
 				
 				$this->accountmodel->set_user_pic($data['upload_data']['file_name']);
