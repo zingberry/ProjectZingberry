@@ -173,6 +173,59 @@ class Account extends CI_Controller {
 		
 	}
 	
+	private function fix_missing_thumb(){
+		Account::is_logged_in();
+		$this->load->model('accountmodel');
+
+		$upload_folder = "./user_images/";
+		
+		if ($handle = opendir('user_images')) {
+
+	   		while (false !== ($file = readdir($handle))) {
+	        	if(strpos($file,"thumb_")===false){
+					//echo $file;
+					if(!file_exists($upload_folder."thumb_".$file) && ($file!=".") && ($file!= "..")){
+					
+
+						$size = getimagesize($upload_folder.$file);		
+						$minsize = min($size[0],$size[1]);
+						$maxsize = max($size[0],$size[1]);
+						
+						$leftoffset = 0;
+						$topoffset = 0;
+				
+						if($maxsize != $minsize){
+							if($size[0] == $maxsize) 	//if width is larger
+								$leftoffset = ($maxsize-$minsize)/2;
+							else						//if height is larger
+								$topoffset = ($maxsize-$minsize)/2;					
+						}
+						
+						//create default thumbnail out of the largest center of a picture
+						Account::crop_and_resize_pic(
+							$leftoffset,
+							$topoffset,
+							/*$leftoffset + */$minsize,
+							/*$topoffset + */ $minsize,
+							$upload_folder.$file,
+							$upload_folder."thumb_".$file
+						);
+				
+						echo '<img src="http://zingberry.com/user_images/'.$file.'" />';
+						echo '<img src="http://zingberry.com/user_images/thumb_'.$file.'" />';
+
+
+					}
+				}
+	    	}
+
+	    	closedir($handle);
+		}
+
+	
+	}
+	
+	
 	function picture(){
 		Account::is_logged_in();
 		
@@ -189,8 +242,6 @@ class Account extends CI_Controller {
 		
 		
 		if($this->input->post('upload')){
-			
-			
 			
 			$config['upload_path'] = $upload_folder;
 			$config['allowed_types'] = 'gif|jpg|jpeg|png';
@@ -228,7 +279,6 @@ class Account extends CI_Controller {
 					else						//if height is larger
 						$topoffset = ($maxsize-$minsize)/2;					
 				}
-				print_r(array($minsize,$maxsize,$leftoffset,$topoffset));
 				
 				//create default thumbnail out of the largest center of a picture
 				Account::crop_and_resize_pic(
