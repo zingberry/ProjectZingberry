@@ -1,5 +1,36 @@
 <?php
 
+
+/*
+ *---------------------------------------------------------------
+ * SMART APPLICATION ENVIORNMENT MANAGEMENT
+ *---------------------------------------------------------------
+ *
+ * Changes variables based on siteurl
+ *
+ */
+
+
+    switch( $_SERVER['SERVER_NAME']){
+        case 'zingberry.com':
+            define('ENVIRONMENT', 'production');
+			$assign_to_config['base_url'] = 'http://zingberry.com/';
+        break;
+        case 'latest.zingberry.com':
+            define('ENVIRONMENT', 'testing');
+			$assign_to_config['base_url'] = 'http://latest.zingberry.com/';
+        break;
+        case 'dev.zingberry.com':
+            define('ENVIRONMENT', 'development');
+			$assign_to_config['base_url'] = 'http://dev.zingberry.com/';
+        break;
+        default:
+            define('ENVIRONMENT', 'production');
+    }
+
+
+
+
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
