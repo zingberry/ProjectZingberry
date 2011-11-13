@@ -801,7 +801,7 @@ class Accountmodel extends CI_Model{
 		}
 		
 		shuffle($result);
-		if(count($result) > 15)
+		if(count($result) > $limit)
 			$result = array_slice($result,0,$limit);
 		                    
 		
