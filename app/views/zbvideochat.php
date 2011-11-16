@@ -357,6 +357,7 @@
 		</script>
 
 		<title>Zingberry - <?=$title?></title>
+<?php $this->load->view('google-analytics'); ?>
 	</head>
 
 	<body onbeforeunload="doUnregistration()">

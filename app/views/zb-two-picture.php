@@ -131,6 +131,7 @@ $(document).ready(function() {
 
 
 <title>Zingberry! Account- Picture</title>
+<?php $this->load->view('google-analytics'); ?>
 </head>
 
 <body>

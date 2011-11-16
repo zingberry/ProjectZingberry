@@ -82,6 +82,7 @@ $(document).ready(function() {
 </script>
 
 <title>Zingberry! Account- Academics</title>
+<?php $this->load->view('google-analytics'); ?>
 </head>
 
 <body>
@@ -90,9 +91,9 @@ $(document).ready(function() {
         	<a href="<?=site_url("account/logout")?>" class="log_out" title="Logout">&nbsp;</a>
         	<a href="<?=site_url("/")?>" title="Zingberry!"><img src="images/mini_logo.png" alt="Zingberry!" /></a>
             <ul>
-            	<li><a href="<?=site_url("video")?>" class="video">&nbsp;</a></li>
-            	<li><a href="<?=site_url("browse")?>" class="browse">&nbsp;</a></li>
-                <li><a href="<?=site_url("account/picture")?>" class="user">&nbsp;</a></li>
+            	<li><a href="<?=site_url("video")?>" class="video" title="Video Chat">&nbsp;</a></li>
+            	<li><a href="<?=site_url("browse")?>" class="browse" title="Browse">&nbsp;</a></li>
+                <li><a href="<?=site_url("account/picture")?>" class="user" title="Account">&nbsp;</a></li>
             </ul>
         </div>
     	
