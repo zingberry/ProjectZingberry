@@ -82,6 +82,7 @@ $(document).ready(function() {
 </script>
 
 <title>Zingberry! Account- Interests</title>
+<?php $this->load->view('google-analytics'); ?>
 </head>
 
 <body>
