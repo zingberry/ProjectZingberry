@@ -486,7 +486,7 @@ class Account extends CI_Controller {
 		$this->load->helper('url');
 		
 		if($this->session->userdata('uid')){
-			redirect('browse','location');
+			redirect('feed','location');
 		}else if($this->input->post('loginsubmit')){
 			$this->load->model('accountmodel');
 			$user = $this->accountmodel->login();
@@ -502,7 +502,7 @@ class Account extends CI_Controller {
 				if($user['logincount']==0)
 					redirect('zing/tutorial','location');
 				else
-					redirect('browse/initial','location');
+					redirect('feed','location');
 			}else if ($this->input->post('email') == ""){
 				$data = Account::account_forms();
 				$data['login_errors'] = 'Please enter your email and password.';

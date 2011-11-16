@@ -18,6 +18,7 @@
 <script type="text/javascript" src="js/jqueryui.js"></script>
 <script type="text/javascript" src="js/timepicker.js"></script>
 <script src="js/jquery.qtip.pack.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/newsticker.js"></script>
 <script type="text/javascript">
 $.extend({URLEncode:function(c){var o='';var x=0;c=c.toString();var r=/(^[a-zA-Z0-9_.]*)/;
   while(x<c.length){var m=r.exec(c.substr(x));
@@ -60,7 +61,7 @@ $(document).ready(function() {
 		window.open('<?=site_url('video')?>','newwin');
 		<? } ?>
 	
-		$("ul.outer li").hoverIntent(
+		$(".feed .row .pic ").hoverIntent(
 		function(){
 			$(this).find("ul.inner, div.hovername, div.hoverzing, div.hoverprops").fadeIn(100);
 			},
@@ -196,6 +197,12 @@ $(document).ready(function() {
 		});
 	});
 	
+	$('.feed').vTicker({
+		direction:'down',
+		animation:'fade',
+		showItems: 4
+	});
+	
 	  
 });			
 	function send_request(){
@@ -300,13 +307,8 @@ $(document).ready(function() {
             
         </div>
         
-        <div id="body1">
-        	
-            <div id="main_content">
-        	<ul class="outer">
-            <?php foreach( $users as $u){ ?>
-        		<li>
-                	<input type="hidden" id="uid" value="<?=$u['user']['uid']?>" />
+        <?php function tile( $u , $side = ""){ ?>
+        		    <input type="hidden" id="uid" value="<?=$u['user']['uid']?>" />
                 	<div class="hovername"><?=$u["user"]["firstname"]?></div>
                     <a href="javascript:zing(<?=$u['user']['uid']?>);" ><div class="hoverzing uid_<?=$u['user']['uid']?>">zing</div> </a>
                     <a href="javascript:props(<?=$u['user']['uid']?>);" ><div class="hoverprops uid_<?=$u['user']['uid']?>">give props</div> </a>
@@ -321,7 +323,7 @@ $(document).ready(function() {
                 <?php } ?>
                 <ul class="inner">
                 	<li><a href="javascript:void(0)">Personal Information</a>
-                    	<ul class="inner_most">
+                    	<ul class="inner_most <?=$side?>">
                         	<li class="name"><b><?=$u["user"]["firstname"]?></b></li>
                         	<li class="title">Class Year</li>
                             	<li class="data"><?=$u["user"]["class"]?></li>
@@ -344,14 +346,14 @@ $(document).ready(function() {
                         </ul>
                     </li>
                      <li><a href="javascript:void(0)">Academics </a>
-                    <ul class="inner_most">
+                    <ul class="inner_most <?=$side?>">
                         	<li class="title">Major</li>
                             	<li class="data"><?=implode(", ",$u['majors'])?></li>
                             <li class="title">Classes</li>
                             	<li class="data"><?=implode("<br />",$u['courses'])?></li>
                         </ul>
                     <li><a href="javascript:void(0)">Organizations</a>
-                    <ul class="inner_most">
+                    <ul class="inner_most <?=$side?>">
                         	<li class="title">Organization</li>
                             <li class="data"><?=implode(", ",$u['organizations'])?></li>
                             <li class="title">Greek Life</li>
@@ -361,7 +363,7 @@ $(document).ready(function() {
                            
                         </ul></li>
                     <li><a href="javascript:void(0)">Interests </a>
-                    <ul class="inner_most">
+                    <ul class="inner_most <?=$side?>">
                         	<li class="title">Favorite Music Artists</li>
                             <li class="data"><?=implode(", ",$u['favorite_music_artists'])?></li>
                             <li class="title">Favorite Heroes</li>
@@ -382,12 +384,40 @@ $(document).ready(function() {
                     <!-- the href attrib is the width of pop up window and the title is the Name of the user which will be displayed on pop up. -->    
                     <li><a href="#?w=450" rel="popup5" class="poplight" title="<?=$u["user"]["firstname"]?>">Send Chat Request</a></li>        
                 </ul>
-                
-                </li>
             <?php } ?>
-        	</ul>
         
-        </div>
+        <div class='feed'>
+            <ul>
+            	<?php foreach($feed_list as $i){ ?>
+            	<li style="height: 163px; display: list-item;">
+                	<table class="row">
+                    	<tr>
+                        	<td class="pic">
+                    			<? tile($i['s_user'],'left'); ?>
+                            </td>
+                        	<td class="action">
+                            	<?=$i['s_user']['user']['firstname']?>
+                            	<?php switch($i['type']){
+											case "zing":
+												?><span class="zing">zinged</span><?
+												break;
+											case "props":
+												?><span class="props">gave props to</span><?
+												break;
+											case "video":
+												?><span class="video">video chat requested</span><?
+												break;
+								}?>
+                                <?=$i['t_user']['user']['firstname']?>
+                            </td>
+                        	<td class="pic">
+                    			<? tile($i['t_user'],'right'); ?>
+                            </td>
+                        </tr>
+                    </table>
+                </li>
+                <? } ?>
+            </ul>
         </div>
     </div>   
 <div id="popup5" class="popup_block">

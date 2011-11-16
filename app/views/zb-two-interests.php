@@ -90,8 +90,9 @@ $(document).ready(function() {
         	<a href="<?=site_url("account/logout")?>" class="log_out" title="Logout">&nbsp;</a>
         	<a href="<?=site_url("/")?>" title="Zingberry!"><img src="images/mini_logo.png" alt="Zingberry!" /></a>
             <ul>
-            	<li><a href="<?=site_url("video")?>" class="video">&nbsp;</a></li>
-                <li><a href="<?=site_url("account")?>" class="user">&nbsp;</a></li>
+            	<li><a href="<?=site_url("video")?>" class="video" title="Video Chat">&nbsp;</a></li>
+            	<li><a href="<?=site_url("browse")?>" class="browse" title="Browse">&nbsp;</a></li>
+                <li><a href="<?=site_url("account/picture")?>" class="user" title="Account">&nbsp;</a></li>
             </ul>
         </div>
     	
@@ -223,11 +224,11 @@ $(document).ready(function() {
 		<div id="slider1">
 			<div id="sliderContent1">
                 <ul class="ac_set">
+                    <li><a href="<?=site_url("account/picture")?>">Picture</a></li>
                     <li><a href="<?=site_url("account")?>">Personal Info</a></li>
                     <li><a href="<?=site_url("account/academics")?>">Academics</a></li>
                     <li><a href="<?=site_url("account/organizations")?>">Organizations</a></li>
                     <li><a href="<?=site_url("account/interests")?>" class="active">Interests</a></li>
-                    <li><a href="<?=site_url("account/picture")?>">Picture</a></li>
                 </ul>
 			</div>
 			<div id="openCloseWrap1">

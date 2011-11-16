@@ -17,7 +17,7 @@
 <body onload="setUpSlideShow()">
 	<div id="content">
       	<div id="slideshow"><div id="slides"><div class="slide"><img src="images/tutorial1.png" width="826" height="305"/>Slide content 1</div><div class="slide"><img src="images/tutorial2.png" width="826" height="305"/>Slide content 2</div><div class="slide"><img src="images/tutorial3.png" width="826" height="305"/>Slide content 3</div><div class="slide"><img src="images/tutorial4.png" width="826" height="305"/>Slide content 4</div><div class="slide"><img src="images/tutorial5.png" width="826" height="305"/>Slide content 5</div><div class="slide"><img src="images/tutorial6.png" width="826" height="305"/>Slide content 6</div></div><div id="slides-controls"><a href="javascript:void(0)">1</a> <a href="javascript:void(0)">2</a> <a href="javascript:void(0)">3</a> <a href="javascript:void(0)">4</a> <a href="javascript:void(0)">5</a> <a href="javascript:void(0)">6</a></div></div>
-        <form action="<?=site_url("account")?>">
+        <form action="<?=site_url("account/picture")?>">
         <input type="submit" class="btn" value="Done!" />
         </form>
          

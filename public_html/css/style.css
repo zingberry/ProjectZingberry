@@ -24,12 +24,14 @@ a.log_out:hover		{ background:url(../images/close_hover.png) top left no-repeat;
 #header	ul li a.video		{ background:url(../images/icons_normal.png) -00px 0px no-repeat;}
 #header	ul li a.marketplace	{ background:url(../images/icons_normal.png) -40px 0px no-repeat;}
 #header	ul li a.events		{ background:url(../images/icons_normal.png) -80px 0px no-repeat;}
+#header	ul li a.browse		{ background:url(../images/icons_normal.png) -80px 0px no-repeat;}
 #header	ul li a.user		{ background:url(../images/icons_normal.png) -120px 0px no-repeat;}
 #header	ul li a.video:hover			{ background:url(../images/icons_hover.png) -00px 0px no-repeat;}
 #header	ul li a.marketplace:hover	{ background:url(../images/icons_hover.png) -40px 0px no-repeat;}
 #header	ul li a.events:hover		{ background:url(../images/icons_hover.png) -80px 0px no-repeat;}
+#header	ul li a.browse:hover		{ background:url(../images/icons_hover.png) -80px 0px no-repeat;}
 #header	ul li a.user:hover			{ background:url(../images/icons_hover.png) -120px 0px no-repeat;}
-#header	input.term			{ width:240px; vertical-align:top; margin-top:40px; border:#999 1px solid;font-family:"Myriad Pro", "Century Gothic", Arial; font-weight:bold; font-size:14px; background:#FFF; text-align:center; padding:2px; height:20px;color:#6f6f6f;}
+#header	input.term			{ width:220px; vertical-align:top; margin-top:40px; border:#999 1px solid;font-family:"Myriad Pro", "Century Gothic", Arial; font-weight:bold; font-size:14px; background:#FFF; text-align:center; padding:2px; height:20px;color:#6f6f6f;}
 #header	select.category			{ width:150x; vertical-align:top; margin-top:40px; border:#999 1px solid;font-family:"Myriad Pro", "Century Gothic", Arial; font-weight:bold; font-size:14px; background:#FFF; text-align:center; padding:2px; height:26px;color:#6f6f6f;}
 #header	input.submit			{vertical-align:top; margin-top:40px; border:#999 1px solid;font-family:"Myriad Pro", "Century Gothic", Arial; font-weight:bold; font-size:14px; background:#6DCC28; text-align:center; height:26px;color:#fff;}
 
@@ -116,20 +118,23 @@ openCloseIdentifier2 { display:none;}
 
 
 ul.outer					{ display:block; position:absolute; list-style:none; width:800px; height:200px; float:left; background:#fff;}
-ul.outer li					{ float:left; width:150px; font-size:12px; font-family:Verdana, Geneva, sans-serif; margin:20px 5px;}
+ul.outer > li				{ float:left; width:137px; font-size:12px; font-family:Verdana, Geneva, sans-serif; margin:20px 10px;}
 ul.outer li	img				{ border:#999 1px solid; padding:4px;}
-ul.outer li	a				{ background:#fff; padding:5px 2px; width:145px; display:inline-block;}
-ul.outer li	a:hover			{ background:#EEE;}
+ul.inner li	a				{  padding:5px 2px; width:133px; display:inline-block;}
+ul.inner li	a:hover			{ background:#EEE;}
 ul.inner					{ display:none; position:absolute; list-style:none; float:left; width:400px; background:none;}
-ul.inner li					{ padding:0px 2px; margin:0px; display:block; float:none; width:150px; border:#aaa 1px solid}
-ul.inner_most				{ display:none; padding:10px; overflow:auto; float:left; position:absolute; list-style:none; width:250px; height:250px; bottom:0; float:left; left:150px; background:#EEE;}
+ul.inner > li					{ padding:0px 2px; background:#fff; margin:0px; display:block; float:none; width:137px; border:#aaa 1px solid}
+ul.inner_most				{ display:none; padding:10px; overflow:auto; float:left; position:absolute; list-style:none; width:250px; height:250px; bottom:0; left:143px; background:#EEE;}
+ul.inner_most.right 		{left:auto;right:400px;}
+ul.inner_most.left 			{left:143px;}
 ul.inner_most li			{ border:none;}
 ul.inner_most li.title		{ color:#777; font-size:14px; padding-top:10px;}
 ul.inner_most li.data		{ color:#999;}
 ul.inner_most li.name		{ font-size:16px; color:#777;}
 #fade 						{ display: none;	background: #000; 	position: fixed; left: 0; top: 0; 	z-index: 10;	width: 100%; height: 100%;	opacity: .80;	z-index: 9999;	}
 .popup_block				{ display: none;	padding: 0px;	float: left;	font-size: 1.2em;	position: fixed;	top: 50%; left: 50%;	z-index: 99999;	background:#fff;	padding:20px;	border:#999 8px solid;	border-radius:10px;}
-img.btn_close 				{ float:right;	margin: -40px -40px 0  0px;		}
+.popup_image				{ display: none;	padding: 0px;	float: left;	font-size: 1.2em;	position: fixed;	top: 50%; left: 50%;	z-index: 99999;	background:#fff;	padding:20px;	border:#999 8px solid;	border-radius:10px;}
+img.btn_close 				{ float:right;	margin: -40px -20px 0  0px;	 position:absolute; right:0px;	}
 ul#form						{ list-style: none;}
 ul#form li					{ float:left; padding:5px 0px; font-size:14px; line-height:20px;}
 ul#form li.lbl				{ width:100px; text-align:right; padding-right:10px;}
@@ -143,3 +148,63 @@ ul.out						{ list-style:none}
 ul.out li					{ float:left; width:140px; height:140px; overflow:hidden}
 ul.data						{ list-style:none}
 ul.data li					{ float:left; width:120px; height:20px;}
+
+.ui-timepicker-div .ui-widget-header{ margin-bottom: 8px; }
+.ui-timepicker-div dl{ text-align: left; }
+.ui-timepicker-div dl dt{ height: 25px; }
+.ui-timepicker-div dl dd{ margin: -25px 0 10px 65px; }
+.ui-timepicker-div td { font-size: 90%; }
+
+.hovername{
+	position: absolute;
+	margin-left: 5px;
+	margin-top: 5px;
+	padding-bottom:3px;
+	background-color: white;
+	width: 133px;
+	text-align: center;
+	display:none;
+}
+.hoverzing{
+	position: absolute;
+	margin-left: 5px;
+	margin-top: 123px;
+	padding-bottom:3px;
+	background-color: #6DCC28;
+	color:white;
+	text-align: center;
+	display:none;
+	/* centered */
+		/* width: 66px; */
+	/* fits word width */
+		width: 50px;
+}
+.hoverprops{
+	position: absolute;
+	margin-top: 123px;
+	padding-bottom:3px;
+	background-color: #6DCC28;
+	color:white;
+	text-align: center;
+	display:none;
+	/* centered */
+		/* width: 66px; 
+		margin-left: 72px; */
+	/* fits word width */
+		width: 82px;
+		margin-left: 55px;
+		border-left-color:white;
+		border-left-width:1px;
+		border-left-style:solid;
+}
+
+
+.feed {margin-top:70px;margin:auto; width:650px;}
+.feed .row {width:100%;font-family:Verdana, Geneva, sans-serif;font-size:12px;}
+.feed .row .action{width:99%;vertical-align:middle;font-size:1.2em;}
+.feed .row .pic{border:0px;text-align:left;}
+.feed .row .pic img	{ border:#999 1px solid; padding:4px;}
+.action .zing {font-weight:bold;color:#6DCC28}
+.action .props {font-weight:bold;color:#E8A523}
+.action .video {font-weight:bold;color:#6F41CC}
+

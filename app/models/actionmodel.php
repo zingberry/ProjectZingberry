@@ -93,7 +93,7 @@ class Actionmodel extends CI_Model{
 	}
 	
     //Needs to be optimized
-    function get_random_zing(){
+    function get_random_zings($limit = 1){
         $query = $this->db->query("SELECT
                                     U1.firstname as s_firstname,
                                     U1.uid as s_uid,
@@ -114,12 +114,22 @@ class Actionmodel extends CI_Model{
         //in the sql query, it does checks to see if the firstname is empty
 
         $result = $query->result_array();
-        return $result[array_rand($result)];
+		shuffle($result);
+		if(count($result) > $limit)
+			$result = array_slice($result,0,$limit);
+			
+		function type_zing($i){
+			$i["type"]="zing";
+			return $i;
+		}
+		$result = array_map("type_zing",$result);
+			
+		return $result;
 
     }
 
 	//Needs to be optimized
-	function get_random_props(){
+	function get_random_props($limit = 1){
 		$query = $this->db->query("SELECT 
 									U1.firstname as s_firstname,
 									U1.uid as s_uid,
@@ -140,8 +150,45 @@ class Actionmodel extends CI_Model{
 		//in the sql query, it does checks to see if the firstname is empty
 				
 		$result = $query->result_array();
-		return $result[array_rand($result)];
+		shuffle($result);
+		if(count($result) > $limit)
+			$result = array_slice($result,0,$limit);
+			
+
+		function type_props($i){
+			$i["type"]="props";
+			return $i;
+		}
+		$result = array_map("type_props",$result);
+			
+		return $result;
 											
 	}
+	
+	function get_random_video_requests($limit=1)
+	{
+		$query = $this->db->query("SELECT 
+										requestor_uid as s_uid,
+										target_uid as t_uid, 
+										date_requested as date_sent 
+									FROM videochat_requests"
+		);
+		
+		//in the sql query, it does checks to see if the firstname is empty
+				
+		$result = $query->result_array();
+		shuffle($result);
+		if(count($result) > $limit)
+			$result = array_slice($result,0,$limit);
+			
+
+		function type_video($i){
+			$i["type"]="video";
+			return $i;
+		}
+		$result = array_map("type_video",$result);
+			
+		return $result;
+	}	
 	
 }

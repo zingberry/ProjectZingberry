@@ -17,11 +17,11 @@ class Action extends CI_Controller {
 
             if($result < 1)
                 echo json_encode(
-                    array( "success" => "false" )
+                    array( "success" => false )
                 );
             if($result == 1)
                 echo json_encode(
-                    array( "success" => "true" )
+                    array( "success" => true )
                 );
         }
 
@@ -53,11 +53,11 @@ class Action extends CI_Controller {
 			
 			if($result < 1)
 				echo json_encode(
-					array( "success" => "false" )
+					array( "success" => false )
 				);
 			if($result == 1)
 				echo json_encode(
-					array( "success" => "true" )
+					array( "success" => true )
 				);
 		}
 	
