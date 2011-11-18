@@ -2,13 +2,13 @@
 
 class Events extends CI_Controller{
 	
-	function layman_date($datetime){
+	private function layman_date($datetime){
 		$temp = DateTime($datetime);
 		if(date_format($temp,"")=="1")
 			return "Today";
 	}
 	
-	function index(){
+	private function index(){
 		
 		$this->load->library('session');
 		$this->load->helper('url');
@@ -28,7 +28,7 @@ class Events extends CI_Controller{
 		
 	}
 	
-	function map(){
+	private function map(){
 		$this->load->library('session');
 		
 		if(!$this->session->userdata('uid')){
@@ -70,7 +70,7 @@ class Events extends CI_Controller{
 		
 	}
 	
-	function events_ajax(){
+	private function events_ajax(){
 		//$payload = json_decode($this->input->post("payload"));
 		
 		//print_r($payload);
@@ -115,7 +115,7 @@ class Events extends CI_Controller{
 		echo $data;
 	}
 	
-	function cats(){
+	private function cats(){
 		$this->load->model('eventsmodel');
 		$result = $this->eventsmodel->get_categorys();	
 		
@@ -126,7 +126,7 @@ class Events extends CI_Controller{
 		
 	}
 	
-	function details($eid){
+	private function details($eid){
 			if(!$this->session->userdata('uid'))
 				redirect('/account/login','location');
 					
@@ -146,7 +146,7 @@ class Events extends CI_Controller{
 	
 	
 	//My old map geocoding function - doesnt work currently. has to be modified still -- Brandon
-	 function geocode($lid){		
+	private function geocode($lid){		
 		if(!$this->session->userdata('uid'))
 			redirect('/account/login','location');
 				

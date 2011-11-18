@@ -3,9 +3,8 @@
 class Browse extends CI_Controller{
 
 	function index(){
-		if(!$this->session->userdata('uid'))
-			redirect('/account/login','location');
-			
+        $this->accountlibrary->is_logged_in();
+        			
 		$this->load->model('accountmodel');
 		
 		
@@ -36,9 +35,8 @@ class Browse extends CI_Controller{
 	}
 	
 	function initial(){
-		if(!$this->session->userdata('uid'))
-			redirect('/account/login','location');
-			
+        $this->accountlibrary->is_logged_in();
+        			
 		$this->load->model('accountmodel');
 		
 		
@@ -70,9 +68,8 @@ class Browse extends CI_Controller{
 	}
 	
 	function search(){
-		if(!$this->session->userdata('uid'))
-			redirect('/account/login','location');
-			
+        $this->accountlibrary->is_logged_in();
+        			
 		$this->load->model('accountmodel');
 		$data = array(
 			"users" => array()

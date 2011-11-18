@@ -2,7 +2,7 @@
 
 
 class Mapdemo extends CI_Controller{
-	function index(){
+	private function index(){
 		$this->load->library('GMap');
 		$this->load->model('eventsmodel');
 

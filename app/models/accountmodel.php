@@ -34,13 +34,6 @@ class Accountmodel extends CI_Model{
 	
 
 	
-	/*	
-	 *	Summary: 	used to get data on a user
-	 *	
-	 *	Parameters: email address, and an already hashed password
-	 * 	Returns:	returns an array of all the data on a user
-	 */
-	 
 	 
 	function set_forgot_password($email){
 		$query = $this->db->query("SELECT * FROM users WHERE email=?",array($email));
@@ -64,18 +57,24 @@ class Accountmodel extends CI_Model{
 				);
 		
 	}
+
+	/*****************************************
+	 *	reset_password (should be reset_forgot_password)
+	 *	- takes in reset code, email, and new password
+	 *  - resets users password accordingly
+	 */
 	
 	function reset_password($email, $password, $reset_code){
 		$query = $this->db->query("SELECT uid FROM users WHERE email=? AND password_reset_code=? LIMIT 1",array($email,$reset_code));
 		
-		if($query->num_rows() == 0)
+		if($query->num_rows() == 0) //if the user doesnt exist, return false
 			return false;
 		
 		$row = $query->row_array();
 		$pass = Accountmodel::password_hash($password);
 		$query = $this->db->query("UPDATE users SET password=?, password_reset_code=NULL WHERE uid=?",array($pass,$row['uid']));
 		
-		if($this->db->affected_rows()!=1)
+		if($this->db->affected_rows()!=1) // is the password wasnt changed, return false
 			return false;
 			
 		return true;
@@ -92,6 +91,14 @@ class Accountmodel extends CI_Model{
 		return $result;
 	}
 	
+
+	/**************************************
+	 *	Deletes any picture for the currently logged in user
+	 *	sets the users Display Picture
+	 *	- image_path is technically just the image name
+	 *
+	 */
+
 	function set_user_pic($image_path){
 		$query = $this->db->query("DELETE FROM userimages WHERE uid=?",array($this->session->userdata('uid')));
 		
@@ -104,6 +111,13 @@ class Accountmodel extends CI_Model{
 		
 		return $this->db->affected_rows();
 	}
+	 
+	/*	
+	 *	Summary: 	used to get data on a user
+	 *	
+	 *	Parameters: email address, and an already hashed password
+	 * 	Returns:	returns an array of all the data on a user
+	 */
 	 
 	function get_account($email, $password){
 		$this->load->database();
@@ -121,7 +135,7 @@ class Accountmodel extends CI_Model{
 	 *	Summary: 	used to get data on a user
 	 *	
 	 *	Parameters: user id number
-	 * 	Returns:	returns an array of all the data on a user
+	 * 	Returns:	returns an array of all the data for that user from the users table only
 	 */
 	 
 	function get_account_by_uid($uid){
@@ -157,6 +171,10 @@ class Accountmodel extends CI_Model{
 		
 	}
 	
+	/*
+	 *	Returns all data from the tempusers table
+	 */
+	
 	function get_temp_accounts(){	
 		$this->load->database();
 		$query = $this->db->query('SELECT * from tempusers ');
@@ -165,6 +183,10 @@ class Accountmodel extends CI_Model{
 		
 	}
 	
+	/*
+	 *	Deletes all duplicate entries from the tempusers table with the provided email address
+	 *
+	 */
 	function purge_temp_accounts($email){	
 		$this->load->database();
 		$data = array(
@@ -296,6 +318,10 @@ class Accountmodel extends CI_Model{
 		
 	}
 	
+	/* 	MODIFY - make $email and $password parameters
+	 *	DONT PULL FROM POST DATA
+	 *
+	 */
 	
 	function is_unregistered(){
 		$this->load->database();
@@ -305,6 +331,13 @@ class Accountmodel extends CI_Model{
 			return true;
 		return false;
 	}
+	
+	/* 	MODIFY - make $email a parameter 
+	 * 	DONT PULL FROM POST DATA
+	 *
+	 *
+	 *
+	 */
 	
 	function is_registered(){
 		$this->load->database();
@@ -430,63 +463,12 @@ class Accountmodel extends CI_Model{
 	}
 	
 	function update_personal_info($form){
-		if($form['nationalities'][0]!=""){
-			$query = $this->db->query("DELETE FROM has_nationality WHERE uid = ?",array($this->session->userdata('uid')));
-			$nats = array();
-			$vals = array();
-			foreach($form['nationalities'] as $i){
-				array_push($nats,$this->session->userdata('uid'));
-				array_push($nats, $i);
-				array_push($vals,"( ?, ?)");
-			}
-			$query = $this->db->query("INSERT IGNORE INTO has_nationality (uid,nid) VALUES ".implode(" , ",$vals),$nats);
-			//return $this->db->affected_rows();
-		}
+
+		Accountmodel::update_static("has_nationality",'nid', $form['nationalities']);	
+		Accountmodel::update_static("speaks_language",'langid', $form['languages']);
 		
-		//print_r($form['languages']);
-		if($form['languages'][0]!=""){
-			$query = $this->db->query("DELETE FROM speaks_language WHERE uid = ?",array($this->session->userdata('uid')));
-			$langs = array();
-			$vals = array();
-			foreach($form['languages'] as $i){
-				array_push($langs,$this->session->userdata('uid'));
-				array_push($langs, $i);
-				array_push($vals,"( ?, ?)");
-			}
-			$query = $this->db->query("INSERT IGNORE INTO speaks_language (uid,langid) VALUES ".implode(" , ",$vals),$langs);
-			//return $this->db->affected_rows();
-		}
-		
-		$query = $this->db->query("DELETE FROM has_dorm WHERE uid = ?",array($this->session->userdata('uid')));
-		if($form['dorm']!=""){
-			$dormid = $this->db->query("SELECT dormid FROM dorms WHERE name = ?",array($form['dorm']));
-			if($dormid->num_rows()>0){
-				$dormid = $dormid->row_array();
-				$dormid = $dormid['dormid'];
-			}else{
-				$query = $this->db->query("INSERT INTO dorms (name) VALUES (?)",array($form['dorm']));	
-				$dormid = $this->db->query("SELECT dormid FROM dorms WHERE name = ?",array($form['dorm']));
-				$dormid = $dormid->row_array();
-				$dormid = $dormid['dormid'];
-			}
-			$query = $this->db->query("INSERT IGNORE INTO has_dorm (uid,dormid) VALUES (?, ?)",array($this->session->userdata('uid'),$dormid));	
-		}
-		
-		
-		$query = $this->db->query("DELETE FROM has_highschool WHERE uid = ?",array($this->session->userdata('uid')));
-		if($form['highschool']!=""){
-			$dormid = $this->db->query("SELECT hid FROM highschool WHERE name = ?",array($form['highschool']));
-			if($dormid->num_rows()>0){
-				$dormid = $dormid->row_array();
-				$dormid = $dormid['hid'];
-			}else{
-				$query = $this->db->query("INSERT INTO highschool (name) VALUES (?)",array($form['highschool']));	
-				$dormid = $this->db->query("SELECT hid FROM highschool WHERE name = ?",array($form['highschool']));
-				$dormid = $dormid->row_array();
-				$dormid = $dormid['hid'];
-			}
-			$query = $this->db->query("INSERT IGNORE INTO has_highschool (uid,hid) VALUES (?, ?)",array($this->session->userdata('uid'),$dormid));
-		}
+		Accountmodel::update_new_single('dorm','has_dorm','dormid','name',$form['dorm']);
+		Accountmodel::update_new_single('highschool','has_highschool','hid','name',$form['highschool']);
 		
 		
 		
@@ -509,38 +491,8 @@ class Accountmodel extends CI_Model{
 	
 	function update_academics($form){
 
-		$query = $this->db->query("DELETE FROM is_taking_course WHERE uid = ?",array($this->session->userdata('uid')));
-		if($form['courses'][0]!=""){
-			foreach($form['courses'] as $i){
-				$query = $this->db->query("SELECT courseid FROM courses WHERE course_name = ?",array($i));
-				if($query->num_rows()>0){
-					$result = $query->row_array();
-					$id = $result['courseid'];
-				}else{
-					$query = $this->db->query("INSERT INTO courses (course_name) VALUES (?)",array($i));	
-					$query = $this->db->query("SELECT courseid FROM courses WHERE course_name = ?",array($i));
-					$result = $query->row_array();
-					$id = $result['courseid'];
-				}
-				$query = $this->db->query("INSERT IGNORE INTO is_taking_course (uid,courseid) VALUES (?, ?)",array($this->session->userdata('uid'),$id));	
-			}
-		}
-		
-		
-		$query = $this->db->query("DELETE FROM has_major WHERE uid = ?",array($this->session->userdata('uid')));
-		if($form['majors'][0]!=""){
-			$langs = array();
-			$vals = array();
-			foreach($form['majors'] as $i){
-				array_push($langs,$this->session->userdata('uid'));
-				array_push($langs, $i);
-				array_push($vals,"( ?, ?)");
-			}
-			$query = $this->db->query("INSERT IGNORE INTO has_major (uid,mid) VALUES ".implode(" , ",$vals),$langs);
-		}
-		
-		
-		
+		Accountmodel::update_new_multi("courses","is_taking_course","courseid","course_name",$form['courses']);
+		Accountmodel::update_static('has_major','mid',$form['majors']);
 		
 	}
 	
@@ -909,104 +861,5 @@ class Accountmodel extends CI_Model{
 		);
 	}
 }
-
-/*$rel_tables = array(
-		"favorite_music_artists" => array(
-			"table" => "favorite_music_artists",
-			"rel_table" => "has_favorite_music_artist",
-			"id" => "artist_id",
-			"name" => "artist_name"
-		),
-		"favorite_heroes" => array(
-			"table" => "favorite_heroes",
-			"rel_table" => "has_favorite_hero",
-			"id" => "fhid",
-			"name" => "name"
-		),
-		"favorite_movies" => array(
-			"table" => "favorite_movies",
-			"rel_table" => "has_favorite_movie",
-			"id" => "movie_id",
-			"name" => "movie_title"
-		),
-		"favorite_tvshows" => array(
-			"table" => "favorite_tvshows",
-			"rel_table" => "has_favorite_tvshow",
-			"id" => "tvshow_id",
-			"name" => "tvshow_title"
-		),
-		"favorite_sports_teams" => array(
-			"table" => "favorite_sports_teams",
-			"rel_table" => "has_favorite_sports_team",
-			"id" => "team_id",
-			"name" => "team_name"
-		),
-		"favorite_video_games" => array(
-			"table" => "favorite_video_games",
-			"rel_table" => "has_favorite_video_game",
-			"id" => "video_game_id",
-			"name" => "video_game_title"
-		),
-		"favorite_books" => array(
-			"table" => "favorite_books",
-			"rel_table" => "has_favorite_book",
-			"id" => "book_id",
-			"name" => "book_title"
-		),
-		"favorite_foods" => array(
-			"table" => "favorite_foods",
-			"rel_table" => "has_favorite_food",
-			"id" => "ffid",
-			"name" => "name"
-		),
-		"organizations" => array(
-			"table" => "organizations",
-			"rel_table" => "is_member_of_organization",
-			"id" => "oid",
-			"name" => "name"
-		),
-		"workplaces" => array(
-			"table" => "workplaces",
-			"rel_table" => "works_at",
-			"id" => "wid",
-			"name" => "name"
-		),
-		"greeks" => array(
-			"table" => "greeks",
-			"rel_table" => "is_member_of_greek",
-			"id" => "greek_id",
-			"name" => "name"
-		),
-		"courses" => array(
-			"table" => "courses",
-			"rel_table" => "is_taking_course",
-			"id" => "courseid",
-			"name" => "course_name"
-		),
-		"majors" => array(
-			"table" => "majors",
-			"rel_table" => "has_major",
-			"id" => "mid",
-			"name" => "major"
-		),
-		"highschool" => array(
-			"table" => "highschool",
-			"rel_table" => "has_highschool",
-			"id" => "hid",
-			"name" => "name"
-		),
-		"languages" => array(
-			"table" => "languages",
-			"rel_table" => "speaks_language",
-			"id" => "langid",
-			"name" => "language"
-		),
-		"nationalities" => array(
-			"table" => "nationalities",
-			"rel_table" => "has_nationality",
-			"id" => "nid",
-			"name" => "nationality"
-		)
-	);*/
 
 ?>

@@ -14,15 +14,8 @@ class Cirrus extends CI_Controller{
 	
 	function index()
 	{
-		$this->load->library('session');
-		$this->load->helper('url');
-		
-		if(!$this->session->userdata('uid'))
-		{
-			redirect('/account/login','location');
-		}
-		else
-		{
+        $this->accountlibrary->is_logged_in();
+        
 			$this->load->model('cirrusmodel');
 			//$uid = $this->session->userdata('uid');
 			
@@ -66,6 +59,6 @@ class Cirrus extends CI_Controller{
 				// invalid request - redirect back to whatever the default page is
 				redirect('', 'location');
 			}
-		}			
+					
 	}	
 }

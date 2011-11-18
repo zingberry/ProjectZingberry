@@ -4,8 +4,8 @@ class Feed extends CI_Controller {
 
 
 	function index(){
-        if(!$this->session->userdata('uid'))
-            redirect('/account/login','location');
+		$this->accountlibrary->is_logged_in();
+
 		$this->load->model("actionmodel");
 		$this->load->model("accountmodel");
 		

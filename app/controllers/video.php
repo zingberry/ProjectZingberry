@@ -11,16 +11,10 @@ class Video extends CI_Controller{
 	// default method with no arguments
 	function index()
 	{
-		$this->load->library('session');
-		$this->load->helper('url');
+        $this->accountlibrary->is_logged_in();
+        
 		$uid = $this->session->userdata('uid');
 		
-		if(!$uid)
-		{
-			redirect('/account/login','location');
-		}
-		else
-		{	
 			// load model for video registration
 			$this->load->model('cirrusmodel');
 			// load model for video chat requests
@@ -49,24 +43,17 @@ class Video extends CI_Controller{
 				// could not find user name, possibly invalid user id or database connection problems
 				// redirect back to whatever the default page is
 				redirect('', 'location');
-			}				
-		}			
+			}
 	}	
 	
 	// Called when a target callee is defined
 	// $tuid - user id of target user
 	function target($tuid)
 	{
-		$this->load->library('session');
-		$this->load->helper('url');
+        $this->accountlibrary->is_logged_in();
+        
 		$uid = $this->session->userdata('uid');
 		
-		if(!$uid)
-		{
-			redirect('/account/login','location');
-		}
-		else
-		{	
 			// load model for video registration
 			$this->load->model('cirrusmodel');
 			// load model for video chat requests
@@ -112,23 +99,16 @@ class Video extends CI_Controller{
 				// redirect back to whatever the default page is
 				redirect('', 'location');
 			}				
-		}		
 	}	
 	
 	
 	// updates the m_updatetime of a given user
 	function updateOnlineStatus()
 	{
-		$this->load->library('session');
-		$this->load->helper('url');
-		$uid = $this->session->userdata('uid');
+        $this->accountlibrary->is_logged_in();
+        
+        $uid = $this->session->userdata('uid');
 		
-		if(!$uid)
-		{
-			redirect('/account/login','location');
-		}
-		else
-		{	
 			// load model for video registration
 			$this->load->model('cirrusmodel');
 			
@@ -149,6 +129,5 @@ class Video extends CI_Controller{
 				// redirect back to whatever the default page is
 				redirect('', 'location');
 			}				
-		}	
 	}
 }

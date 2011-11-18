@@ -16,14 +16,9 @@ class Account extends CI_Controller {
 			
 	}
 	
-	private function is_logged_in(){
-		if(!$this->session->userdata('uid'))
-			redirect('/account/login','location');
-	}
-	
 	function organizations(){
-		Account::is_logged_in();
-		
+        $this->accountlibrary->is_logged_in();
+        		
 		$this->load->model('accountmodel');
 		if($this->input->post("organizations_update")){
 			//echo print_r($this->input->post());
@@ -50,8 +45,8 @@ class Account extends CI_Controller {
 
 	
 	function academics(){
-		Account::is_logged_in();
-		
+        $this->accountlibrary->is_logged_in();
+        		
 		
 		$this->load->model('accountmodel');
 		if($this->input->post("academics_update")){
@@ -78,8 +73,8 @@ class Account extends CI_Controller {
 	}
 	
 	function interests(){
-		Account::is_logged_in();
-		
+        $this->accountlibrary->is_logged_in();
+        		
 		$this->load->model('accountmodel');
 		if($this->input->post("interests_update")){
 			//echo print_r($this->input->post());
@@ -227,8 +222,8 @@ class Account extends CI_Controller {
 	
 	
 	function picture(){
-		Account::is_logged_in();
-		
+        $this->accountlibrary->is_logged_in();
+        		
 		$this->load->model('accountmodel');
 		
 		$upload_folder = './user_images/';
@@ -432,9 +427,9 @@ class Account extends CI_Controller {
 	}
 	
 	function index(){
-		if(!$this->session->userdata('uid'))
-			redirect('/account/login','location');
-		$this->load->model('accountmodel');
+        $this->accountlibrary->is_logged_in();
+        
+        $this->load->model('accountmodel');
 		
 		if($this->input->post("profile_update")){
 			//echo print_r($this->input->post());
