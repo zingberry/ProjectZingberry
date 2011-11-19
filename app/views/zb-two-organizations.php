@@ -83,6 +83,7 @@ $(document).ready(function() {
 </script>
 
 <title>Zingberry! Account- Organizations</title>
+<?php $this->load->view('google-analytics'); ?>
 </head>
 
 <body>
