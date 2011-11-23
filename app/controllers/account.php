@@ -372,7 +372,7 @@ class Account extends CI_Controller {
 					echo $this->accountmodel->json_token("courses","courseid","course_name",$this->input->post("q"));
 					break;
 				case 'favorite_books':
-					echo $this->accountmodel->json_token("favorite_books","book_id","book_name",$this->input->post("q"));
+					echo $this->accountmodel->json_token("favorite_books","book_id","book_title",$this->input->post("q"));
 					break;
 				case 'favorite_foods':
 					echo $this->accountmodel->json_token("favorite_foods","ffid","name",$this->input->post("q"));
