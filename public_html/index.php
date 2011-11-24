@@ -10,7 +10,7 @@
  *
  */
 
-
+if(isset($_SERVER['SERVER_NAME'])){
     switch( $_SERVER['SERVER_NAME']){
         case 'zingberry.com':
             define('ENVIRONMENT', 'production');
@@ -27,6 +27,10 @@
         default:
             define('ENVIRONMENT', 'production');
     }
+} else {
+	define('ENVIRONMENT', 'production');
+}
+	
 
 
 
