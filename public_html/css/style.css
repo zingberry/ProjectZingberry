@@ -34,8 +34,7 @@ a.log_out:hover		{ background:url(../images/close_hover.png) top left no-repeat;
 #header	input.term			{ width:220px; vertical-align:top; margin-top:40px; border:#999 1px solid;font-family:"Myriad Pro", "Century Gothic", Arial; font-weight:bold; font-size:14px; background:#FFF; text-align:center; padding:2px; height:20px;color:#6f6f6f;}
 #header	select.category			{ width:150x; vertical-align:top; margin-top:40px; border:#999 1px solid;font-family:"Myriad Pro", "Century Gothic", Arial; font-weight:bold; font-size:14px; background:#FFF; text-align:center; padding:2px; height:26px;color:#6f6f6f;}
 #header	input.submit			{vertical-align:top; margin-top:40px; border:#999 1px solid;font-family:"Myriad Pro", "Century Gothic", Arial; font-weight:bold; font-size:14px; background:#6DCC28; text-align:center; height:26px;color:#fff;}
-
-
+input#searchsubmit {position: absolute; margin-left: -30px; margin-top: 40px; height: 25px;}
 
 #body				{ background:url(../images/account_body_bg.jpg) top left repeat-x; height:550px; width:630px;overflow:auto; display:inline-block; text-align:left; padding-left:20px; padding-top:20px;margin-left:10%;margin-right:10%}
 #body h2			{font-size:22px;}

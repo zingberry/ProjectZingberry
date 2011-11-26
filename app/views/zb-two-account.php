@@ -131,7 +131,7 @@ $(document).ready(function() {
                             <option <? if($user['relationship_status']=="r"){echo ' selected="selected" ';} ?> value="r">In A Relationship</option>
                         </select>
                     </li>
-                    <li>Dorm Location</li>
+                    <li>Home</li>
                     <li><input id="dorm" type="text" name="dorm" /></li>
                     <script type="text/javascript">
 						$(document).ready(function() {
@@ -188,11 +188,7 @@ $(document).ready(function() {
 							});
 						});
 					</script>
-                    <li>Religious Views</li>
-                    <li><input id="religious_views" type="text" name="religious_views" value="<?=$user['religious_views']?>"/></li>
-                    <li>Political Views</li>
-                    <li><input id="political_views" type="text" name="political_views" value="<?=$user['political_views']?>"/></li>
-                    <li><input type="submit" name="profile_update" class="btn" value="Save" /></li>
+                    
                      
                 
                 	

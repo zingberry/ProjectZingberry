@@ -272,30 +272,32 @@ $(document).ready(function() {
             <form id="search" action="<?=site_url("browse/search")?>" method="post" style="display:inline;">
             	<select height=24 class="category" name="category">
                 	<option value="">Choose a Category</option>
-                	<option <? if($this->input->post('category')=='favorite_music_artists'){ echo 'selected="selected"';}?> value="favorite_music_artists">Favorite Music Artist</option>
-                	<option <? if($this->input->post('category')=='favorite_heroes'){ echo 'selected="selected"';}?> value="favorite_heroes">Hero</option>
-                	<option <? if($this->input->post('category')=='favorite_movies'){ echo 'selected="selected"';}?> value="favorite_movies">Favorite Movie</option>
-                	<option <? if($this->input->post('category')=='favorite_tvshows'){ echo 'selected="selected"';}?> value="favorite_tvshows">Favorite Tv Show</option>
-                	<option <? if($this->input->post('category')=='favorite_sports_teams'){ echo 'selected="selected"';}?> value="favorite_sports_teams">Favorite Sports Team</option>
-                	<option <? if($this->input->post('category')=='favorite_video_games'){ echo 'selected="selected"';}?> value="favorite_video_games">Favorite Game</option>
-                	<option <? if($this->input->post('category')=='favorite_books'){ echo 'selected="selected"';}?> value="favorite_books">Favorite Book</option>
-                	<option <? if($this->input->post('category')=='favorite_foods'){ echo 'selected="selected"';}?> value="favorite_foods">Favorite Food</option>
-                	<option <? if($this->input->post('category')=='organizations'){ echo 'selected="selected"';}?> value="organizations">Organization</option>
-                	<option <? if($this->input->post('category')=='workplaces'){ echo 'selected="selected"';}?> value="workplaces">Workplace</option>
-                	<option <? if($this->input->post('category')=='greeks'){ echo 'selected="selected"';}?> value="greeks">Greeks</option>
                 	<option <? if($this->input->post('category')=='courses'){ echo 'selected="selected"';}?> value="courses">Course</option>
-                	<option <? if($this->input->post('category')=='majors'){ echo 'selected="selected"';}?> value="majors">Major</option>
-                	<option <? if($this->input->post('category')=='highschool'){ echo 'selected="selected"';}?> value="highschool">High School</option>
-                	<option <? if($this->input->post('category')=='languages'){ echo 'selected="selected"';}?> value="languages">Language</option>
-                	<option <? if($this->input->post('category')=='nationalities'){ echo 'selected="selected"';}?> value="nationalities">Nationality</option>
-                	<option <? if($this->input->post('category')=='class'){ echo 'selected="selected"';}?> value="class">Class Year</option>
+<option <? if($this->input->post('category')=='organizations'){ echo 'selected="selected"';}?> value="organizations">Organization</option>
+<option <? if($this->input->post('category')=='greeks'){ echo 'selected="selected"';}?> value="greeks">Greeks</option>
+<option <? if($this->input->post('category')=='majors'){ echo 'selected="selected"';}?> value="majors">Major</option>
+<option <? if($this->input->post('category')=='workplaces'){ echo 'selected="selected"';}?> value="workplaces">Workplace</option>
+<option <? if($this->input->post('category')=='class'){ echo 'selected="selected"';}?> value="class">Class Year</option>
+<option <? if($this->input->post('category')=='highschool'){ echo 'selected="selected"';}?> value="highschool">High School</option>
+<option <? if($this->input->post('category')=='nationalities'){ echo 'selected="selected"';}?> value="nationalities">Nationality</option>
+<option <? if($this->input->post('category')=='languages'){ echo 'selected="selected"';}?> value="languages">Language</option>
+<option <? if($this->input->post('category')=='favorite_music_artists'){ echo 'selected="selected"';}?> value="favorite_music_artists">Favorite Music Artist</option>
+<option <? if($this->input->post('category')=='favorite_movies'){ echo 'selected="selected"';}?> value="favorite_movies">Favorite Movie</option>
+<option <? if($this->input->post('category')=='favorite_tvshows'){ echo 'selected="selected"';}?> value="favorite_tvshows">Favorite Tv Show</option>
+<option <? if($this->input->post('category')=='favorite_sports_teams'){ echo 'selected="selected"';}?> value="favorite_sports_teams">Favorite Sports Team</option>
+<option <? if($this->input->post('category')=='favorite_video_games'){ echo 'selected="selected"';}?> value="favorite_video_games">Favorite Game</option>
+<option <? if($this->input->post('category')=='favorite_books'){ echo 'selected="selected"';}?> value="favorite_books">Favorite Book</option>
+<option <? if($this->input->post('category')=='favorite_books'){ echo 'selected="selected"';}?> value="favorite_books">Favorite Book</option>
+<option <? if($this->input->post('category')=='favorite_foods'){ echo 'selected="selected"';}?> value="favorite_foods">Favorite Food</option>
+<option <? if($this->input->post('category')=='favorite_heroes'){ echo 'selected="selected"';}?> value="favorite_heroes">Favorite Hero</option>
                 </select>
-            	<input name="term" class="term" type="text" value="<?=$this->input->post("term")?>" title="search similarities" />
-                <input class="submit" type="submit" value="search!" />
+            	<input name="term" class="term" type="text" value="<?=$this->input->post("term")?>" title="search groups & interests" />
+                <input id="searchsubmit" type="image" title="Search" alt="Search" src="images/zoom.png" value="Search" name="submit" style="display:inline;">
+                <input class="submit" type="submit" value="random!" />
             </form>
             <ul>
-            	<li><a href="<?=site_url("video")?>" class="video" title="Video Chat">&nbsp;</a></li>
             	<li><a href="<?=site_url("browse")?>" class="browse" title="Browse">&nbsp;</a></li>
+            	<li><a href="<?=site_url("video")?>" class="video" title="Video Chat">&nbsp;</a></li>
                 <li><a href="<?=site_url("account/picture")?>" class="user" title="Account">&nbsp;</a></li>
             </ul>
             
