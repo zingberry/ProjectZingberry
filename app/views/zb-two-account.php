@@ -188,7 +188,12 @@ $(document).ready(function() {
 							});
 						});
 					</script>
-                    
+                    <li>Religious Views</li>
+                    <li><input id="religious_views" type="text" name="religious_views" value="<?=$user['religious_views']?>"/></li>
+                    <li>Political Views</li>
+                    <li><input id="political_views" type="text" name="political_views" value="<?=$user['political_views']?>"/></li>
+                    <li><input type="submit" name="profile_update" class="btn" value="Save" /></li>
+
                      
                 
                 	

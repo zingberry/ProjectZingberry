@@ -409,16 +409,16 @@ class Accountmodel extends CI_Model{
 		
 	}
 	
-	function update_new_single($table, $reltable,$idfield, $namefield, $namearray){
+	function update_new_single($table, $reltable,$idfield, $namefield, $value){
 		$query = $this->db->query("DELETE FROM $reltable WHERE uid = ?",array($this->session->userdata('uid')));
-		if($namearray!=""){
-			$dormid = $this->db->query("SELECT $idfield FROM $table WHERE $namefield = ?",array($form[$table]));
+		if($value!=""){
+			$dormid = $this->db->query("SELECT $idfield FROM $table WHERE $namefield = ?",array($value));
 			if($dormid->num_rows()>0){
 				$dormid = $dormid->row_array();
 				$dormid = $dormid[$idfield];
 			}else{
-				$query = $this->db->query("INSERT INTO $table ($namefield) VALUES (?)",array($form[$table]));	
-				$dormid = $this->db->query("SELECT $idfield FROM $table WHERE $namefield = ?",array($form[$table]));
+				$query = $this->db->query("INSERT INTO $table ($namefield) VALUES (?)",array($value));	
+				$dormid = $this->db->query("SELECT $idfield FROM $table WHERE $namefield = ?",array($value));
 				$dormid = $dormid->row_array();
 				$dormid = $dormid[$idfield];
 			}
@@ -467,7 +467,7 @@ class Accountmodel extends CI_Model{
 		Accountmodel::update_static("has_nationality",'nid', $form['nationalities']);	
 		Accountmodel::update_static("speaks_language",'langid', $form['languages']);
 		
-		Accountmodel::update_new_single('dorm','has_dorm','dormid','name',$form['dorm']);
+		Accountmodel::update_new_single('dorms','has_dorm','dormid','name',$form['dorm']);
 		Accountmodel::update_new_single('highschool','has_highschool','hid','name',$form['highschool']);
 		
 		
