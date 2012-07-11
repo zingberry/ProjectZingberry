@@ -113,7 +113,7 @@ $(document).ready(function() {
 	  <form id="frm_register" name="frm_register" action="<?=site_url("account/register")?>" method="post">
    	  <ul class="form">
       	<div id="slideshow"><div id="slides"><div class="slide"><img src="images/slideshowtext.png" width="826" height="305"/>Slide content 1</div><div class="slide"><img src="images/slideshowtile.png" width="826" height="305"/>Slide content 2</div><div class="slide"><img src="images/slideshowvideo.png" width="826" height="305"/>Slide content 3</div></div><div id="slides-controls"><a href="javascript:void(0)">1</a> <a href="javascript:void(0)">2</a> <a href="javascript:void(0)">3</a></div></div>
-      			           
+      			<!--           
            	    <input type="text" name="name" value="<?=$this->input->post('name')?>" title="Name"/></li>
                 <li><input type="text" name="email" value="<?=$this->input->post('email')?>" title="Rutgers Email" /></li>
                 <li><input type="password" name="password" value="" title="Password" /></li>
@@ -123,7 +123,12 @@ $(document).ready(function() {
                 </li>
         </ul>
       </form>
-    	
+    	-->
+        <br />
+        <br />
+        <big><a href="https://github.com/zingberry/ProjectZingberry" target="_blank">Now on Github</a></big>
+
+       
     	
 </div>
     <div id="footer">
@@ -135,6 +140,7 @@ $(document).ready(function() {
             
         </ul>
     </div>
+    <!--
     <div id="sliderWrap">
     <div id="openCloseIdentifier"></div>
 		<div id="slider">
@@ -154,6 +160,7 @@ $(document).ready(function() {
 				</a>
 			</div>
 		</div>
+        -->
 </div>
 </body>
 </html>
