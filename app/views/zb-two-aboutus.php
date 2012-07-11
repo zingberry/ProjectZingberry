@@ -111,7 +111,7 @@
 					<img src="images/bios/Shawn.png" border="0" width="200" height="220" /> 
 				</div> 
 				<div class="text"> 
-					<p><strong>Shawn  Jaison, CEO and Co-Founder</strong></p> 
+					<p><strong><a href="http://www.linkedin.com/in/sjaison">Shawn Jaison</a>, CEO and Co-Founder</strong></p> 
 					<p>Shawn is the CEO and product  visionary for Zingberry. He recruited some of the most talented and gifted  people to join and share his vision for a better way to stay connected with a college community. He founded  his first company called Tutoring Express in December 2009. Shawn loves <a href="http://www.python.org"target="_blank">python</a>, front end web development, <a href="http://nj.milesplit.com/athletes/405387-shawn-jaison" target="_blank">track and field</a> and feedback and can always be contacted at <a href="mailto:shawnjaison@zingberry.com">shawnjaison@zingberry.com</a></p> 
 				</div> 
 			</div>	
